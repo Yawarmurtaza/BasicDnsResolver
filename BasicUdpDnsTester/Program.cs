@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -39,8 +40,9 @@ namespace BasicUdpDnsTester.ConsoleRunner
         
         private static Tuple<string, string> GetUserInput()
         {
-            string dn = "killer.net";
-            string ipaddress = "172.20.10.1";
+            AppSettingsReader appSettings = new AppSettingsReader();
+            string dn = appSettings.GetValue("DomainNameToResolve", typeof(string)).ToString();
+            string ipaddress = appSettings.GetValue("DNSServerIpAddress", typeof(string)).ToString();
 
             Console.WriteLine($"Domain name: defaults to {dn}");
 
@@ -50,7 +52,7 @@ namespace BasicUdpDnsTester.ConsoleRunner
                 domainName = dn;
             }
 
-            Console.WriteLine("DSE Server IP Address: ");
+            Console.WriteLine($"DSE Server IP Address: defaults to {ipaddress} ");
             string dseServerIpAddress = Console.ReadLine();
             if (string.IsNullOrEmpty(dseServerIpAddress))
             {
@@ -63,8 +65,8 @@ namespace BasicUdpDnsTester.ConsoleRunner
         private static DnsRequestMessage GetDnsRequestMessage(string domainNameToResolve)
         {
             ushort headerId = GetNextUniqueId();
-            DnsRequestHeader header = new DnsRequestHeader(headerId, DnsOpCode.Query);
-            DnsQuestion question = new DnsQuestion(domainNameToResolve, QueryType.A);
+            DnsRequestHeader header = new DnsRequestHeader(headerId, true, DnsOpCode.Query);
+            DnsQuestion question = new DnsQuestion(domainNameToResolve, QueryType.A, QueryClass.IN);
             DnsRequestMessage message = new DnsRequestMessage(header, question);
             return message;
         }

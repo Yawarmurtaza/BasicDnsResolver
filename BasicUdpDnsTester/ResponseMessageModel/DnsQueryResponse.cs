@@ -9,8 +9,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
     /// <summary>
     /// The response returned by any query performed by <see cref="IDnsQuery"/> with all answer sections, header and message information.
     /// </summary>
-    /// <seealso cref="IDnsQuery"/>
-    /// <seealso cref="ILookupClient"/>
     public class DnsQueryResponse : IDnsQueryResponse
     {
         private int? _hashCode;
@@ -29,7 +27,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         public IReadOnlyList<DnsResourceRecord> Additionals { get; }
 
         /// <summary>
-        /// Gets a list of all answers, addtional and authority records.
+        /// Gets a list of all answers, additional and authority records.
         /// </summary>
         public IEnumerable<DnsResourceRecord> AllRecords
         {
@@ -131,7 +129,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         {
             if (!_hashCode.HasValue)
             {
-                _hashCode = (Header.ToString() + string.Join("", Questions) + string.Join("", AllRecords)).GetHashCode();
+                _hashCode = (Header + string.Join("", Questions) + string.Join("", AllRecords)).GetHashCode();
             }
 
             return _hashCode.Value;

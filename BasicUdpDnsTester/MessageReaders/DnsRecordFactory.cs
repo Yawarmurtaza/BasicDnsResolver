@@ -4,7 +4,7 @@ using BasicUdpDnsTester.ConsoleRunner.RequestMessageModel;
 
 namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
 {
-    internal class DnsRecordFactory
+    public class DnsRecordFactory
     {
         private readonly DnsDatagramReader _reader;
 

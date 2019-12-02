@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
 
 namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
@@ -41,37 +42,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         public DnsResponseException(string message) : base(message)
         {
             Code = DnsResponseCode.Unassigned;
-            DnsError = DnsResponseCodeText.GetErrorText(Code);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DnsResponseException"/> class 
-        /// with <see cref="Code"/> set to <see cref="DnsResponseCode.Unassigned"/>
-        /// and a custom <paramref name="message"/> and inner <see cref="Exception"/>.
-        /// </summary>
-        public DnsResponseException(string message, Exception innerException) : base(message, innerException)
-        {
-            Code = DnsResponseCode.Unassigned;
-            DnsError = DnsResponseCodeText.GetErrorText(Code);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DnsResponseException"/> class 
-        /// with a custom <paramref name="message"/> and the given <paramref name="code"/>.
-        /// </summary>
-        public DnsResponseException(DnsResponseCode code, string message) : base(message)
-        {
-            Code = code;
-            DnsError = DnsResponseCodeText.GetErrorText(Code);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DnsResponseException"/> class 
-        /// with a custom <paramref name="message"/> and the given <paramref name="code"/>.
-        /// </summary>
-        public DnsResponseException(DnsResponseCode code, string message, Exception innerException) : base(message, innerException)
-        {
-            Code = code;
             DnsError = DnsResponseCodeText.GetErrorText(Code);
         }
     }

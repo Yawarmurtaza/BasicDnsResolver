@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
+using BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel;
 
 namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
 {
     /// <summary>
-    /// The <see cref="DnsQuestion"/> class transports information of the lookup query performed by <see cref="IDnsQuery"/>.
+    /// The <see cref="DnsQuestion"/> class transports information of the lookup query performed by <see cref="DnsQuery"/>.
     /// <para>
     /// A list of questions is returned by <see cref="IDnsQueryResponse"/> (although, the list will always contain only one <see cref="DnsQuestion"/>).
     /// </para>

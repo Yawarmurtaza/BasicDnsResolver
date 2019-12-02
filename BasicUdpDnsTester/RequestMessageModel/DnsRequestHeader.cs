@@ -4,8 +4,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
 {
     public class DnsRequestHeader
     {
-        public const int HeaderLength = 12;
-
         private ushort _flags = 0;
 
         public ushort RawFlags => _flags;
@@ -42,19 +40,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
             {
                 _flags &= (ushort)~(DnsHeader.OPCodeMask);
                 _flags |= (ushort)(((ushort)value << DnsHeader.OPCodeShift) & DnsHeader.OPCodeMask);
-            }
-        }
-
-        public ushort RCode
-        {
-            get
-            {
-                return (ushort)(DnsHeader.RCodeMask & _flags);
-            }
-            set
-            {
-                _flags &= (ushort)~(DnsHeader.RCodeMask);
-                _flags |= (ushort)(value & DnsHeader.RCodeMask);
             }
         }
 

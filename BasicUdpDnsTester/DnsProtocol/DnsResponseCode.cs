@@ -1,4 +1,6 @@
-﻿namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
+﻿using BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel;
+
+namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
 {
     /// <summary>
     /// Response codes of the <see cref="IDnsQueryResponse"/>.
@@ -128,11 +130,6 @@
         /// <summary>
         /// Unknown error.
         /// </summary>
-        Unassigned = 666,
-
-        /// <summary>
-        /// Indicates a timeout error. Connection to the remote server couldn't be established.
-        /// </summary>
-        ConnectionTimeout = 999
+        Unassigned = 666
     }
 }

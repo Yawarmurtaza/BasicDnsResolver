@@ -65,40 +65,5 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
 
             Questions.Add(question);
         }
-
-        public LookupClientAudit Audit { get; set; }
-
-        /// <summary>
-        /// Gets the readonly representation of this message which can be returned.
-        /// </summary>
-        public DnsQueryResponse AsQueryResponse(NameServer nameServer, DnsQuerySettings settings)
-            => new DnsQueryResponse(this, nameServer, Audit, settings);
-
-        public static DnsResponseMessage Combine(ICollection<DnsResponseMessage> messages)
-        {
-            if (messages.Count <= 1)
-            {
-                return messages.FirstOrDefault();
-            }
-
-            var first = messages.First();
-
-            var header = new DnsResponseHeader(
-                first.Header.Id,
-                (ushort)first.Header.HeaderFlags,
-                first.Header.QuestionCount,
-                messages.Sum(p => p.Header.AnswerCount),
-                messages.Sum(p => p.Header.AdditionalCount),
-                first.Header.NameServerCount);
-
-            var response = new DnsResponseMessage(header, messages.Sum(p => p.MessageSize));
-
-            response.Questions.AddRange(first.Questions);
-            response.Additionals.AddRange(messages.SelectMany(p => p.Additionals));
-            response.Answers.AddRange(messages.SelectMany(p => p.Answers));
-            response.Authorities.AddRange(messages.SelectMany(p => p.Authorities));
-
-            return response;
-        }
     }
 }

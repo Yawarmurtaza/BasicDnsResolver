@@ -7,7 +7,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
     /// Base class for <see cref="DnsResourceRecord"/>s transporting an <see cref="IPAddress"/>.
     /// </summary>
     /// <seealso cref="ARecord"/>
-    /// <seealso cref="AaaaRecord"/>
     public class AddressRecord : DnsResourceRecord
     {
         /// <summary>

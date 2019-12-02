@@ -71,13 +71,10 @@ namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
             }
         }
 
-
         public void Advance(int length)
         {
             Index += length;
         }
-
-       
 
         // only used by the DnsQuestion as we don't expect any escaped chars in the actual query posted to and send back from the DNS Server (not supported).
         public DnsString ReadQuestionQueryString()

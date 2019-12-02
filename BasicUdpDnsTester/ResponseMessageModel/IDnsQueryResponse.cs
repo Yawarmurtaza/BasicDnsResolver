@@ -7,8 +7,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
     /// <summary>
     /// Contract defining the result of a query performed by <see cref="IDnsQuery"/>.
     /// </summary>
-    /// <seealso cref="IDnsQuery"/>
-    /// <seealso cref="ILookupClient"/>
     public interface IDnsQueryResponse
     {
         /// <summary>
@@ -22,7 +20,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         IReadOnlyList<DnsResourceRecord> Additionals { get; }
 
         /// <summary>
-        /// Gets a list of all answers, addtional and authority records.
+        /// Gets a list of all answers, additional and authority records.
         /// </summary>
         IEnumerable<DnsResourceRecord> AllRecords { get; }
 

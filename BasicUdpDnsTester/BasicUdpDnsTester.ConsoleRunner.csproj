@@ -58,6 +58,7 @@
     <Compile Include="MessageReaders\StringBuilderObjectPool.cs" />
     <Compile Include="ResponseMessageModel\DnsQueryResponse.cs" />
     <Compile Include="ResponseMessageModel\DnsQuerySettings.cs" />
+    <Compile Include="ResponseMessageModel\DnsResponseCodeText.cs" />
     <Compile Include="ResponseMessageModel\DnsResponseException.cs" />
     <Compile Include="ResponseMessageModel\DnsResponseHeader.cs" />
     <Compile Include="ResponseMessageModel\DnsResponseMessage.cs" />

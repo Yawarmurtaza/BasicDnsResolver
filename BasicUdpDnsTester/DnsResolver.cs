@@ -17,12 +17,14 @@ namespace BasicUdpDnsTester.ConsoleRunner
             using (UdpClient udpClient = new UdpClient(server.AddressFamily))
             {
                 Socket clientSocket = udpClient.Client;
+                int timeoutInMillis = 5000;
+                clientSocket.ReceiveTimeout = timeoutInMillis;
+                clientSocket.SendTimeout = timeoutInMillis;
+
                 using (DnsDatagramWriter writer = new DnsDatagramWriter())
                 {
                     this.ConstructRequestData(dnsRequest, writer);
-                    
-                    byte[] dnsRequestData = writer.Data.Array;
-                    clientSocket.SendTo(dnsRequestData, 0, dnsRequestData.Length, SocketFlags.None, server);
+                    clientSocket.SendTo(writer.Data.Array, 0, writer.Data.Count, SocketFlags.None, server);
                 }
 
                 using (PooledBytes memory = new PooledBytes(ReadSize))

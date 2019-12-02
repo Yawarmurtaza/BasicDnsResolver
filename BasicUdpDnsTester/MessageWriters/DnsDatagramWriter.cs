@@ -32,13 +32,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.MessageWriters
             _buffer = new ArraySegment<byte>(_pooledBytes.Buffer, 0, BufferSize);
         }
 
-        public DnsDatagramWriter(ArraySegment<byte> useBuffer)
-        {
-            //Debug.Assert(useBuffer.Count >= BufferSize);
-
-            _buffer = useBuffer;
-        }
-
         public void WriteHostName(string queryName)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(queryName);
