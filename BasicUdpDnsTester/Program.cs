@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
@@ -15,16 +16,18 @@ namespace BasicUdpDnsTester.ConsoleRunner
     {
         private static int _uniqueId;
         private static Random _random = new Random();
+        private const int dnsPortNumber = 53;
 
         static void Main(string[] args)
         {
             Tuple<string, string> userInput = GetUserInput();
             string domainName = userInput.Item1;
             string dnsServerIp = userInput.Item2;
+
             try
             {
                 DnsResolver resolver = new DnsResolver();
-                IPEndPoint server = new IPEndPoint(IPAddress.Parse(dnsServerIp), 53);
+                IPEndPoint server = new IPEndPoint(IPAddress.Parse(dnsServerIp), dnsPortNumber);
                 DnsRequestMessage dnsRequest = GetDnsRequestMessage(domainName);
                 DnsResponseMessage response = resolver.Query(server, dnsRequest);
                 PrintResult(response);
@@ -37,14 +40,14 @@ namespace BasicUdpDnsTester.ConsoleRunner
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
         }
-        
+
         private static Tuple<string, string> GetUserInput()
         {
             AppSettingsReader appSettings = new AppSettingsReader();
             string dn = appSettings.GetValue("DomainNameToResolve", typeof(string)).ToString();
-            string ipaddress = appSettings.GetValue("DNSServerIpAddress", typeof(string)).ToString();
+            string targetDnsServerName = appSettings.GetValue("TargetDnsServerName", typeof(string)).ToString();
 
-            Console.WriteLine($"Domain name: defaults to {dn}");
+            Console.WriteLine($"Domain Name to resolve defaults to {dn}");
 
             string domainName = Console.ReadLine();
             if (string.IsNullOrEmpty(domainName))
@@ -52,14 +55,16 @@ namespace BasicUdpDnsTester.ConsoleRunner
                 domainName = dn;
             }
 
-            Console.WriteLine($"DSE Server IP Address: defaults to {ipaddress} ");
-            string dseServerIpAddress = Console.ReadLine();
-            if (string.IsNullOrEmpty(dseServerIpAddress))
+            Console.WriteLine($"Target DNS Server name defaults to {targetDnsServerName} ");
+            string dnsServerName = Console.ReadLine();
+            if (string.IsNullOrEmpty(dnsServerName))
             {
-                dseServerIpAddress = ipaddress;
+                dnsServerName = targetDnsServerName;
             }
 
-            return new Tuple<string, string>(domainName, dseServerIpAddress);
+            string targetDnsServerIpAddress = Dns.GetHostAddresses(dnsServerName).First(ip => ip.AddressFamily == AddressFamily.InterNetwork).ToString();
+            Console.WriteLine($"Using the IP Address [{targetDnsServerIpAddress}] for the target DNS Server.");
+            return new Tuple<string, string>(domainName, targetDnsServerIpAddress);
         }
 
         private static DnsRequestMessage GetDnsRequestMessage(string domainNameToResolve)
