@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
 using BasicUdpDnsTester.ConsoleRunner.RequestMessageModel;
@@ -12,14 +11,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
     public class DnsQueryResponse : IDnsQueryResponse
     {
         private int? _hashCode;
-
-        /// <summary>
-        /// Gets the name server which responded with this result.
-        /// </summary>
-        /// <value>
-        /// The name server.
-        /// </value>
-        public NameServer NameServer { get; }
 
         /// <summary>
         /// Gets a list of additional records.
@@ -62,11 +53,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         public string ErrorMessage => DnsResponseCodeText.GetErrorText(Header.ResponseCode);
 
         /// <summary>
-        /// A flag indicating if the header contains a response codde other than <see cref="DnsResponseCode.NoError"/>.
-        /// </summary>
-        public bool HasError => Header?.ResponseCode != DnsResponseCode.NoError;
-
-        /// <summary>
         /// Gets the header of the response.
         /// </summary>
         public DnsResponseHeader Header { get; }
@@ -76,34 +62,8 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         /// </summary>
         public IReadOnlyList<DnsQuestion> Questions { get; }
 
-        /// <summary>
-        /// Gets the size of the message.
-        /// </summary>
-        /// <value>
-        /// The size of the message.
-        /// </value>
-        public int MessageSize { get; }
-
-        /// <summary>
-        /// Gets the settings used to produce this response.
-        /// </summary>
-        public DnsQuerySettings Settings { get; }
-
         internal LookupClientAudit Audit { get; }
-
-        internal DnsQueryResponse(DnsResponseMessage dnsResponseMessage, NameServer nameServer, LookupClientAudit audit, DnsQuerySettings settings)
-        {
-            if (dnsResponseMessage == null) throw new ArgumentNullException(nameof(dnsResponseMessage));
-            Header = dnsResponseMessage.Header;
-            MessageSize = dnsResponseMessage.MessageSize;
-            Questions = dnsResponseMessage.Questions.ToArray();
-            Answers = dnsResponseMessage.Answers.ToArray();
-            Additionals = dnsResponseMessage.Additionals.ToArray();
-            Authorities = dnsResponseMessage.Authorities.ToArray();
-            NameServer = nameServer ?? throw new ArgumentNullException(nameof(nameServer));
-            Audit = audit;
-            Settings = settings;
-        }
+        
 
         /// <inheritdoc />
         public override bool Equals(object obj)

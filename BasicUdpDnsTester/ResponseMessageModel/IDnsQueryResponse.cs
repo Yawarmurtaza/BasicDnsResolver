@@ -20,11 +20,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         IReadOnlyList<DnsResourceRecord> Additionals { get; }
 
         /// <summary>
-        /// Gets a list of all answers, additional and authority records.
-        /// </summary>
-        IEnumerable<DnsResourceRecord> AllRecords { get; }
-
-        /// <summary>
         /// Gets a list of answer records.
         /// </summary>
         IReadOnlyList<DnsResourceRecord> Answers { get; }
@@ -47,36 +42,5 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         /// otherwise '<see cref="DnsResponseCode.NoError"/>'.
         /// </summary>
         string ErrorMessage { get; }
-
-        /// <summary>
-        /// A flag indicating if the header contains a response codde other than <see cref="DnsResponseCode.NoError"/>.
-        /// </summary>
-        bool HasError { get; }
-
-        /// <summary>
-        /// Gets the header of the response.
-        /// </summary>
-        DnsResponseHeader Header { get; }
-
-        /// <summary>
-        /// Gets the size of the message.
-        /// </summary>
-        /// <value>
-        /// The size of the message.
-        /// </value>
-        int MessageSize { get; }
-
-        /// <summary>
-        /// Gets the name server which responded with this result.
-        /// </summary>
-        /// <value>
-        /// The name server.
-        /// </value>
-        NameServer NameServer { get; }
-
-        /// <summary>
-        /// Gets the settings used to produce this response.
-        /// </summary>
-        DnsQuerySettings Settings { get; }
     }
 }

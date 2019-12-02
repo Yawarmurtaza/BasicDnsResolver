@@ -84,13 +84,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         public int? SupportedUdpPayloadSize { get; internal set; }
 
         internal IPEndPoint IPEndPoint { get; }
-
-        /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
-        /// </returns>
+        
         public override string ToString()
         {
             return $"{Address}:{Port} (Udp: {SupportedUdpPayloadSize ?? 512})";

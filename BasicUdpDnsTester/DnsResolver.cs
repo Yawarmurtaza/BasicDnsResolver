@@ -18,7 +18,7 @@ namespace BasicUdpDnsTester.ConsoleRunner
             {
                 Socket clientSocket = udpClient.Client;
                 int timeoutInMillis = 5000;
-                clientSocket.ReceiveTimeout = timeoutInMillis;
+                clientSocket.ReceiveTimeout = timeoutInMillis;  
                 clientSocket.SendTimeout = timeoutInMillis;
 
                 using (DnsDatagramWriter writer = new DnsDatagramWriter())
@@ -30,7 +30,7 @@ namespace BasicUdpDnsTester.ConsoleRunner
                 using (PooledBytes memory = new PooledBytes(ReadSize))
                 {
                     int received = clientSocket.Receive(memory.Buffer, 0, ReadSize, SocketFlags.None);
-                    DnsResponseMessage response = GetResponseMessage(memory.BufferSegment);
+                    DnsResponseMessage response = this.GetResponseMessage(memory.BufferSegment);
                     if (dnsRequest.Header.Id != response.Header.Id)
                     {
                         throw new DnsResponseException("Header id mismatch.");

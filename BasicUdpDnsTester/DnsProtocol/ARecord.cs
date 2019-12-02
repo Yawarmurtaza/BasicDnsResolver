@@ -19,7 +19,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
     */
 
     /// <summary>
-    /// A <see cref="DnsResourceRecord"/> represending an IPv4 <see cref="IPAddress"/>.
+    /// A <see cref="DnsResourceRecord"/> representing an IPv4 <see cref="IPAddress"/>.
     /// Hosts that have multiple Internet addresses will have multiple A records.
     /// </summary>
     /// <seealso href="https://tools.ietf.org/html/rfc1035">RFC 1035</seealso>

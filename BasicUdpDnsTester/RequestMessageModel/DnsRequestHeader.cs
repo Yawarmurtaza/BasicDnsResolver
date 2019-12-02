@@ -62,11 +62,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
             }
         }
 
-        public DnsRequestHeader(int id, DnsOpCode queryKind)
-            : this(id, true, queryKind)
-        {
-        }
-
         public DnsRequestHeader(int id, bool useRecursion, DnsOpCode queryKind)
         {
             Id = id;

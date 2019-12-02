@@ -135,7 +135,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         /// <param name="answerCount">The answer count.</param>
         /// <param name="additionalCount">The additional count.</param>
         /// <param name="serverCount">The server count.</param>
-        [CLSCompliant(false)]
+        //[CLSCompliant(false)]
         public DnsResponseHeader(int id, ushort flags, int questionCount, int answerCount, int additionalCount, int serverCount)
         {
             Id = id;

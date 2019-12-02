@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
 
 namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
@@ -17,14 +16,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         /// The response code.
         /// </value>
         public DnsResponseCode Code { get; }
-
-        /// <summary>
-        /// Gets the audit trail if <see cref="ILookupClient.EnableAuditTrail"/>. as set to <c>true</c>, <c>null</c> otherwise.
-        /// </summary>
-        /// <value>
-        /// The audit trail.
-        /// </value>
-        public string AuditTrail { get; internal set; }
 
         /// <summary>
         /// Gets a human readable error message.

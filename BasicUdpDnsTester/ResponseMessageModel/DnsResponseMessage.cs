@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
 using BasicUdpDnsTester.ConsoleRunner.RequestMessageModel;
 
