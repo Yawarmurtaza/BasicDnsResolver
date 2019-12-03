@@ -8,24 +8,14 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
     /// <summary>
     /// The header section of a <see cref="IDnsQueryResponse"/>.
     /// </summary>
-    public class DnsResponseHeader
+    public class  DnsResponseHeader
     {
         private readonly ushort _flags;
 
-        /// <summary>
-        /// Gets the number of additional records in the <see cref="IDnsQueryResponse"/>.
-        /// </summary>
-        /// <value>
-        /// The number of additional records.
-        /// </value>
+        /// <summary> Gets the number of additional records. </summary>
         public int AdditionalCount { get; }
 
-        /// <summary>
-        /// Gets the number of answer records in the <see cref="IDnsQueryResponse"/>.
-        /// </summary>
-        /// <value>
-        /// The number of answer records.
-        /// </value>
+        /// <summary> Gets the number of answer records.</summary>
         public int AnswerCount { get; }
 
         /// <summary>
@@ -38,13 +28,10 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
 
         internal DnsHeaderFlag HeaderFlags => (DnsHeaderFlag)_flags;
 
-        /// <summary>
-        /// Gets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public int Id { get; }
+        /// <summary> Gets the identifier. It is used to match the response with the query that was sent by the client.
+        /// We use different (random) identifier number each time sending a query to the DNS server.
+        /// The DNS server duplicates this number in the corresponding response. This helps up to pair up the query and response messages.</summary>
+        public int Identifier { get; }
 
         /// <summary>
         /// Gets a value indicating whether the result is authentic data.
@@ -86,12 +73,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         /// </value>
         public DnsOpCode OPCode => (DnsOpCode)((DnsHeader.OPCodeMask & _flags) >> DnsHeader.OPCodeShift);
 
-        /// <summary>
-        /// Gets the number of questions of the <see cref="IDnsQueryResponse"/>.
-        /// </summary>
-        /// <value>
-        /// The number of questions.
-        /// </value>
+        /// <summary> Gets the number of questions records. </summary>
         public int QuestionCount { get; }
 
         /// <summary>
@@ -138,7 +120,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         //[CLSCompliant(false)]
         public DnsResponseHeader(int id, ushort flags, int questionCount, int answerCount, int additionalCount, int serverCount)
         {
-            Id = id;
+            Identifier = id;
             _flags = flags;
             QuestionCount = questionCount;
             AnswerCount = answerCount;
@@ -156,7 +138,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         /// </returns>
         public override string ToString()
         {
-            var head = $";; ->>HEADER<<- opcode: {OPCode}, status: {DnsResponseCodeText.GetErrorText(ResponseCode)}, id: {Id}";
+            var head = $";; ->>HEADER<<- opcode: {OPCode}, status: {DnsResponseCodeText.GetErrorText(ResponseCode)}, id: {Identifier}";
             var flags = new string[] {
                 HasQuery ? "qr" : "",
                 HasAuthorityAnswer ? "aa" : "",

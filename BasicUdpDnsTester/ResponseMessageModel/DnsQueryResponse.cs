@@ -26,15 +26,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
             {
                 return Answers.Concat(Additionals).Concat(Authorities);
             }
-        }
-
-        /// <summary>
-        /// Gets the audit trail if <see cref="ILookupClient.EnableAuditTrail"/>. as set to <c>true</c>, <c>null</c> otherwise.
-        /// </summary>
-        /// <value>
-        /// The audit trail.
-        /// </value>
-        public string AuditTrail => Audit?.Build(this);
+        }       
 
         /// <summary>
         /// Gets a list of answer records.
@@ -62,7 +54,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
         /// </summary>
         public IReadOnlyList<DnsQuestion> Questions { get; }
 
-        internal LookupClientAudit Audit { get; }
+        //internal LookupClientAudit Audit { get; }
         
 
         /// <inheritdoc />

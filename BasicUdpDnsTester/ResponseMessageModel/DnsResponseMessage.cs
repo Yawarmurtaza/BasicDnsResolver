@@ -7,6 +7,12 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
 {
     public class DnsResponseMessage
     {
+        /// <summary>
+        /// Represents the DNS response object containing header, answer, authoritative and additional sections.
+        /// We can use Question section as well but not needed for now.
+        /// </summary>
+        /// <param name="header"></param>
+        /// <param name="messageSize"></param>
         public DnsResponseMessage(DnsResponseHeader header, int messageSize)
         {
             Header = header ?? throw new ArgumentNullException(nameof(header));

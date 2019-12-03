@@ -16,19 +16,22 @@ namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
             }
             set
             {
-                _flags &= (ushort)~(DnsHeaderFlag.IsCheckingDisabled);
-                _flags &= (ushort)~(DnsHeaderFlag.IsAuthenticData);
-                _flags &= (ushort)~(DnsHeaderFlag.FutureUse);
-                _flags &= (ushort)~(DnsHeaderFlag.HasQuery);
-                _flags &= (ushort)~(DnsHeaderFlag.HasAuthorityAnswer);
-                _flags &= (ushort)~(DnsHeaderFlag.ResultTruncated);
-                _flags &= (ushort)~(DnsHeaderFlag.RecursionDesired);
-                _flags &= (ushort)~(DnsHeaderFlag.RecursionAvailable);
+                _flags &= (ushort)~DnsHeaderFlag.IsCheckingDisabled;
+                _flags &= (ushort)~DnsHeaderFlag.IsAuthenticData;
+                _flags &= (ushort)~DnsHeaderFlag.FutureUse;
+                _flags &= (ushort)~DnsHeaderFlag.HasQuery;
+                _flags &= (ushort)~DnsHeaderFlag.HasAuthorityAnswer;
+                _flags &= (ushort)~DnsHeaderFlag.ResultTruncated;
+                _flags &= (ushort)~DnsHeaderFlag.RecursionDesired;
+                _flags &= (ushort)~DnsHeaderFlag.RecursionAvailable;
                 _flags |= (ushort)value;
             }
         }
 
-        public int Id { get; set; }
+        /// <summary> Gets the identifier. It is used to match the response with the query that was sent by the client.
+        /// We use different (random) identifier number each time sending a query to the DNS server.
+        /// The DNS server duplicates this number in the corresponding response. This helps up to pair up the query and response messages.</summary>
+        public int Identifier { get; set; }
 
         public DnsOpCode OpCode
         {
@@ -64,14 +67,14 @@ namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
 
         public DnsRequestHeader(int id, bool useRecursion, DnsOpCode queryKind)
         {
-            Id = id;
+            Identifier = id;
             OpCode = queryKind;
             UseRecursion = useRecursion;
         }
 
         public override string ToString()
         {
-            return $"{Id} - Qs: {1} Recursion: {UseRecursion} OpCode: {OpCode}";
+            return $"{Identifier} - Qs: {1} Recursion: {UseRecursion} OpCode: {OpCode}";
         }
     }
 }

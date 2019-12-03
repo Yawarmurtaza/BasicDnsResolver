@@ -52,7 +52,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
                 throw new ArgumentNullException(nameof(info));
             }
 
-            var oldIndex = _reader.Index;
+            int oldIndex = _reader.Index;
             DnsResourceRecord result;
 
             switch (info.RecordType)

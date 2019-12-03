@@ -2,6 +2,9 @@
 
 namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
 {
+    /// <summary>
+    /// Represents the DNS query object that contains header and question sections.
+    /// </summary>
     public class DnsRequestMessage
     {
         public DnsRequestHeader Header { get; }

@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.Text;
-using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
 
 namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
 {
-    public class LookupClientAudit
+    /*public class LookupClientAudit
     {
         private const string c_placeHolder = "$$REPLACEME$$";
         private static readonly int s_printOffset = -32;
         private StringBuilder _auditWriter = new StringBuilder();
-        private Stopwatch _swatch;
-
+       
         public DnsQuerySettings Settings { get; }
 
         public LookupClientAudit(DnsQuerySettings settings)
@@ -77,5 +74,5 @@ namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
 
             return all.Replace(c_placeHolder, dynamic);
         }
-    }
+    }*/
 }

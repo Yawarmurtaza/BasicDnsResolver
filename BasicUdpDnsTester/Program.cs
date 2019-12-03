@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+
 using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Threading.Tasks;
 using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
 using BasicUdpDnsTester.ConsoleRunner.RequestMessageModel;
 using BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel;
@@ -71,6 +70,7 @@ namespace BasicUdpDnsTester.ConsoleRunner
         {
             ushort headerId = GetNextUniqueId();
             DnsRequestHeader header = new DnsRequestHeader(headerId, true, DnsOpCode.Query);
+            
             DnsQuestion question = new DnsQuestion(domainNameToResolve, QueryType.A, QueryClass.IN);
             DnsRequestMessage message = new DnsRequestMessage(header, question);
             return message;

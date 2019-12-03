@@ -106,7 +106,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
                 throw new ArgumentException($"'{query}' is not a legal name, found leading root label.", nameof(query));
             }
 
-            if (query.Length == 0 || (query.Length == 1 && query.Equals(DotStr)))
+            if (query.Length == 0 || query.Length == 1 && query.Equals(DotStr))
             {
                 return RootLabel;
             }
@@ -128,14 +128,14 @@ namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
                 {
                     labelCharCount++;
                     charCount++;
-                    if (!(c == '-' || c == '_' ||
+                    /*if (!(c == '-' || c == '_' ||
                           c >= 'a' && c <= 'z' ||
                           c >= 'A' && c <= 'Z' ||
                           c >= '0' && c <= '9'))
                     {
                         try
                         {
-                            var result = IDN.GetAscii(query);
+                            string result = IDN.GetAscii(query);
                             if (result[result.Length - 1] != Dot)
                             {
                                 result += Dot;
@@ -147,7 +147,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
                         {
                             throw new ArgumentException($"'{query}' is not a valid hostname.", nameof(query), ex);
                         }
-                    }
+                    }*/
                 }
             }
 

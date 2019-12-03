@@ -31,7 +31,7 @@ namespace BasicUdpDnsTester.ConsoleRunner
                 {
                     int received = clientSocket.Receive(memory.Buffer, 0, ReadSize, SocketFlags.None);
                     DnsResponseMessage response = this.GetResponseMessage(memory.BufferSegment);
-                    if (dnsRequest.Header.Id != response.Header.Id)
+                    if (dnsRequest.Header.Identifier != response.Header.Identifier)
                     {
                         throw new DnsResponseException("Header id mismatch.");
                     }
@@ -64,7 +64,7 @@ namespace BasicUdpDnsTester.ConsoleRunner
             * */
             // 4 more bytes for the type and class
 
-            writer.WriteInt16NetworkOrder((short)request.Header.Id);
+            writer.WriteInt16NetworkOrder((short)request.Header.Identifier);
             writer.WriteUInt16NetworkOrder(request.Header.RawFlags);
             writer.WriteInt16NetworkOrder(1);   // we support single question only... (as most DNS servers anyways).
             writer.WriteInt16NetworkOrder(0);
@@ -81,7 +81,7 @@ namespace BasicUdpDnsTester.ConsoleRunner
                +------------+--------------+------------------------------+
                | NAME       | domain name  | MUST be 0 (root domain)      |
                | TYPE       | u_int16_t    | OPT (41)                     |
-               | CLASS      | u_int16_t    | requestor's UDP payload size |
+               | CLASS      | u_int16_t    | requester's UDP payload size |
                | TTL        | u_int32_t    | extended RCODE and flags     |
                | RDLEN      | u_int16_t    | length of all RDATA          |
                | RDATA      | octet stream | {attribute,value} pairs      |
@@ -99,8 +99,8 @@ namespace BasicUdpDnsTester.ConsoleRunner
 
         private DnsResponseMessage GetResponseMessage(ArraySegment<byte> responseData)
         {
-            var reader = new DnsDatagramReader(responseData);
-            var factory = new DnsRecordFactory(reader);
+            DnsDatagramReader reader = new DnsDatagramReader(responseData);
+            DnsRecordFactory factory = new DnsRecordFactory(reader);
 
             ushort id = reader.ReadUInt16NetworkOrder();
             ushort flags = reader.ReadUInt16NetworkOrder();
