@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
-
-namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel
 {
+    using System.Collections.Generic;
+    using InfraServiceJobPackage.Library.DnsHelper.DnsProtocol;
+
     public static class DnsResponseCodeText
     {
         private const string BADALG = "Algorithm not supported";

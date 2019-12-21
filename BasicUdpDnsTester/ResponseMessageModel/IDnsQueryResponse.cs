@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
-using BasicUdpDnsTester.ConsoleRunner.RequestMessageModel;
-
-namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel
 {
+    using System.Collections.Generic;
+    using InfraServiceJobPackage.Library.DnsHelper.Records;
+    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+
     public interface IDnsQueryResponse
     {
         /// <summary>

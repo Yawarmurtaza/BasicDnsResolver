@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
-
-namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// The readonly version of <see cref="DnsQueryOptions"/> used to customize settings per query.
     /// </summary>

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Buffers;
-
-namespace BasicUdpDnsTester.ConsoleRunner.MessageWriters
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.MessageWriters
 {
+    using System;
+    using System.Buffers;
+
     public class PooledBytes : IDisposable
     {
         private static readonly ArrayPool<byte> _pool = ArrayPool<byte>.Create(4096 * 4, 100);

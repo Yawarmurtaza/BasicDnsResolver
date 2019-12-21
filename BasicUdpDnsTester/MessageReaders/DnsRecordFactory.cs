@@ -1,16 +1,16 @@
-﻿using System;
-using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
-using BasicUdpDnsTester.ConsoleRunner.RequestMessageModel;
-
-namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.MessageReaders
 {
+    using System;
+    using InfraServiceJobPackage.Library.DnsHelper.Records;
+    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+
     public class DnsRecordFactory
     {
-        private readonly DnsDatagramReader _reader;
+        private readonly IDnsDatagramReader _reader;
 
-        public DnsRecordFactory(DnsDatagramReader reader)
+        public DnsRecordFactory(IDnsDatagramReader reader)
         {
-            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
+            _reader = reader;
         }
 
         /*
@@ -35,17 +35,19 @@ namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
         +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
          * */
 
-        public ResourceRecordInfo ReadRecordInfo()
+        public BaseResourceRecordInfo ReadRecordInfo()
         {
-            return new ResourceRecordInfo(
-                _reader.ReadQuestionQueryString(),            // name
+            IDnsString readQuestionQueryString = _reader.ReadQuestionQueryString();
+            return new BaseResourceRecordInfo(                
                 (ResourceRecordType)_reader.ReadUInt16NetworkOrder(),   // type
                 (QueryClass)_reader.ReadUInt16NetworkOrder(),           // class
                 (int)_reader.ReadUInt32NetworkOrder(),        // ttl - 32bit!!
-                _reader.ReadUInt16NetworkOrder());          // RDLength
+                _reader.ReadUInt16NetworkOrder(), // RDLength
+                readQuestionQueryString            // name
+                );          
         }
 
-        public DnsResourceRecord GetRecord(ResourceRecordInfo info)
+        public DnsResourceRecord GetRecord(BaseResourceRecordInfo info)
         {
             if (info == null)
             {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel
 {
     /// <summary>
     /// Represents the DNS query object that contains header and question sections.
@@ -13,8 +11,8 @@ namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
 
         public DnsRequestMessage(DnsRequestHeader header, DnsQuestion question)
         {
-            Header = header ?? throw new ArgumentNullException(nameof(header));
-            Question = question ?? throw new ArgumentNullException(nameof(question));
+            Header = header;
+            Question = question;
         }
     }
 }

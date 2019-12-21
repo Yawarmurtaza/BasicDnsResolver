@@ -1,4 +1,4 @@
-﻿namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.Records
 {
     /// <summary>
     /// A <see cref="DnsResourceRecord"/> not representing any specifc resource record.
@@ -12,11 +12,11 @@
         /// </summary>
         /// <param name="info">The information.</param>
         /// <exception cref="System.ArgumentNullException">If <paramref name="info"/> is null.</exception>
-        public EmptyRecord(ResourceRecordInfo info) : base(info)
+        public EmptyRecord(BaseResourceRecordInfo info) : base(info)
         {
         }
 
-        private protected override string RecordToString()
+        protected override string RecordToString()
         {
             return string.Empty;
         }

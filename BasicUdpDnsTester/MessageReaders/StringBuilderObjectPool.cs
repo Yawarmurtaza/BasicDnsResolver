@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Threading;
 
-namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
+namespace InfraServiceJobPackage.Library.DnsHelper.MessageReaders
 {
     public class StringBuilderObjectPool
     {
@@ -43,7 +43,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
 
         public void Return(StringBuilder value)
         {
-            //return;
             if (value == null || value.Capacity > _maxPooledCapacity)
             {
                 return;

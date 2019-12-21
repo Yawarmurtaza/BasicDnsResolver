@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
-using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
-using BasicUdpDnsTester.ConsoleRunner.RequestMessageModel;
-
-namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel
 {
+    using System.Linq;
+    using InfraServiceJobPackage.Library.DnsHelper.DnsProtocol;
+    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+
     /// <summary>
     /// The header section of a <see cref="IDnsQueryResponse"/>.
     /// </summary>

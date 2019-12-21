@@ -1,29 +1,58 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
-using BasicUdpDnsTester.ConsoleRunner.MessageReaders;
-using BasicUdpDnsTester.ConsoleRunner.MessageWriters;
-using BasicUdpDnsTester.ConsoleRunner.RequestMessageModel;
-using BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel;
-
-namespace BasicUdpDnsTester.ConsoleRunner
+﻿namespace InfraServiceJobPackage.Library.DnsHelper
 {
-    public class DnsResolver
-    {
-        private const int ReadSize = 4096;
-        public DnsResponseMessage Query(IPEndPoint server, DnsRequestMessage dnsRequest)
-        {
-            using (UdpClient udpClient = new UdpClient(server.AddressFamily))
-            {
-                Socket clientSocket = udpClient.Client;
-                int timeoutInMillis = 5000;
-                clientSocket.ReceiveTimeout = timeoutInMillis;  
-                clientSocket.SendTimeout = timeoutInMillis;
+    using InfraServiceJobPackage.Library.DnsHelper.DnsProtocol;
+    using InfraServiceJobPackage.Library.DnsHelper.MessageReaders;
+    using InfraServiceJobPackage.Library.DnsHelper.MessageWriters;
+    using InfraServiceJobPackage.Library.DnsHelper.Records;
+    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+    using InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel;
+    using System;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Threading;
 
+    public class DnsResolver : IDnsResolver
+    {
+        private const int dnsPortNumber = 53;
+        private int _uniqueId;
+        private Random _random = new Random();
+        private const int ReadSize = 4096;
+        private readonly ICommunicator communicator;
+        private readonly IDnsString dnsString;
+
+        public DnsResolver(ICommunicator communicator, IDnsString dnsString)
+        {
+            this.communicator = communicator;
+            this.dnsString = dnsString;
+        }
+
+        public DnsResponseMessage Resolve(string dseServerName, string domainNameToResolve)
+        {
+            string targetDnsServerIpAddress = Dns.GetHostAddresses(dseServerName).First(ip => ip.AddressFamily == AddressFamily.InterNetwork).ToString();
+            IPEndPoint server = new IPEndPoint(IPAddress.Parse(targetDnsServerIpAddress), dnsPortNumber);
+
+            DnsRequestMessage request = GetDnsRequestMessage(domainNameToResolve);
+            return Resolve(server, request);
+        }
+
+        public DnsResponseMessage Resolve(IPEndPoint server, string domainNameToResolve)
+        {
+            DnsRequestMessage request = GetDnsRequestMessage(domainNameToResolve);
+            return Resolve(server, request);
+        }
+
+        public DnsResponseMessage Resolve(IPEndPoint server, DnsRequestMessage dnsRequest)
+        {
+            using (communicator)
+            {
+                IUdpSocketProxy clientSocket = communicator.Client;
+                int timeoutInMillis = 5000;
+                clientSocket.ReceiveTimeout = timeoutInMillis;
+                clientSocket.SendTimeout = timeoutInMillis;
                 using (DnsDatagramWriter writer = new DnsDatagramWriter())
                 {
-                    this.ConstructRequestData(dnsRequest, writer);
+                    ConstructRequestData(dnsRequest, writer);
                     clientSocket.SendTo(writer.Data.Array, 0, writer.Data.Count, SocketFlags.None, server);
                 }
 
@@ -38,7 +67,28 @@ namespace BasicUdpDnsTester.ConsoleRunner
 
                     return response;
                 }
+            }           
+        }
+
+        private DnsRequestMessage GetDnsRequestMessage(string domainNameToResolve)
+        {
+            ushort headerId = GetNextUniqueId();
+            DnsRequestHeader header = new DnsRequestHeader(headerId, true, DnsOpCode.Query);
+
+            DnsQuestion question = new DnsQuestion(dnsString.Parse(domainNameToResolve), QueryType.A, QueryClass.IN);
+            DnsRequestMessage message = new DnsRequestMessage(header, question);
+            return message;
+        }
+
+        private ushort GetNextUniqueId()
+        {
+            if (_uniqueId == ushort.MaxValue || _uniqueId == 0)
+            {
+                Interlocked.Exchange(ref _uniqueId, _random.Next(ushort.MaxValue / 2));
+                return (ushort)_uniqueId;
             }
+
+            return unchecked((ushort)Interlocked.Increment(ref _uniqueId));
         }
 
         private void ConstructRequestData(DnsRequestMessage request, DnsDatagramWriter writer)
@@ -71,7 +121,7 @@ namespace BasicUdpDnsTester.ConsoleRunner
             writer.WriteInt16NetworkOrder(0);
             writer.WriteInt16NetworkOrder(1);    // one additional for the Opt record.
 
-            writer.WriteHostName(question.QueryName);
+            writer.WriteHostName(question.QueryName.Value);
             writer.WriteUInt16NetworkOrder((ushort)question.QuestionType);
             writer.WriteUInt16NetworkOrder((ushort)question.QuestionClass);
 
@@ -99,7 +149,7 @@ namespace BasicUdpDnsTester.ConsoleRunner
 
         private DnsResponseMessage GetResponseMessage(ArraySegment<byte> responseData)
         {
-            DnsDatagramReader reader = new DnsDatagramReader(responseData);
+            IDnsDatagramReader reader = new DnsDatagramReader(responseData, dnsString);
             DnsRecordFactory factory = new DnsRecordFactory(reader);
 
             ushort id = reader.ReadUInt16NetworkOrder();
@@ -120,21 +170,21 @@ namespace BasicUdpDnsTester.ConsoleRunner
 
             for (int answerIndex = 0; answerIndex < answerCount; answerIndex++)
             {
-                ResourceRecordInfo info = factory.ReadRecordInfo();
+                BaseResourceRecordInfo info = factory.ReadRecordInfo();
                 DnsResourceRecord record = factory.GetRecord(info);
                 response.AddAnswer(record);
             }
 
             for (int serverIndex = 0; serverIndex < nameServerCount; serverIndex++)
             {
-                ResourceRecordInfo info = factory.ReadRecordInfo();
+                BaseResourceRecordInfo info = factory.ReadRecordInfo();
                 DnsResourceRecord record = factory.GetRecord(info);
                 response.AddAuthority(record);
             }
 
             for (int additionalIndex = 0; additionalIndex < additionalCount; additionalIndex++)
             {
-                ResourceRecordInfo info = factory.ReadRecordInfo();
+                BaseResourceRecordInfo info = factory.ReadRecordInfo();
                 DnsResourceRecord record = factory.GetRecord(info);
                 response.AddAdditional(record);
             }

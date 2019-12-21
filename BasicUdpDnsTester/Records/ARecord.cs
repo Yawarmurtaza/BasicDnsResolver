@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
+namespace InfraServiceJobPackage.Library.DnsHelper.Records
 {
     /*
     3.4.1. A RDATA format
@@ -29,7 +29,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
         /// Initializes a new instance of the <see cref="ARecord"/> class.
         /// </summary>
         /// <inheritdoc />
-        public ARecord(ResourceRecordInfo info, IPAddress address) : base(info, address)
+        public ARecord(BaseResourceRecordInfo info, IPAddress address) : base(info, address)
         {
         }
     }

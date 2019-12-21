@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text;
 
-namespace BasicUdpDnsTester.ConsoleRunner.MessageWriters
+namespace InfraServiceJobPackage.Library.DnsHelper.MessageWriters
 {
     public class DnsDatagramWriter : IDisposable
     {

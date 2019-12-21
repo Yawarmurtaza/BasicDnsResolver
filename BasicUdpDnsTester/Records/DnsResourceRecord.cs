@@ -1,25 +1,19 @@
 ﻿using System;
 
-namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
+namespace InfraServiceJobPackage.Library.DnsHelper.Records
 {
     /// <summary>
-    /// Base class for all resource records.
+    /// Base class for all DNS resource records.
     /// </summary>
     /// <seealso cref="ResourceRecordInfo" />
-    public abstract class DnsResourceRecord : ResourceRecordInfo
+    public abstract class DnsResourceRecord : BaseResourceRecordInfo
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DnsResourceRecord" /> class.
         /// </summary>
         /// <param name="info">The information.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="info"/> is null.</exception>
-        protected DnsResourceRecord(ResourceRecordInfo info)
-            : base(
-                info?.DomainName ?? throw new ArgumentNullException(nameof(info)),
-                info?.RecordType ?? throw new ArgumentNullException(nameof(info)),
-                info?.RecordClass ?? throw new ArgumentNullException(nameof(info)),
-                info?.InitialTimeToLive ?? throw new ArgumentNullException(nameof(info)),
-                info?.RawDataLength ?? throw new ArgumentNullException(nameof(info)))
+        protected DnsResourceRecord(BaseResourceRecordInfo info) : base(info.RecordType, info.RecordClass, info.InitialTimeToLive, info.RawDataLength, info.DomainName)
         {
         }
 
@@ -30,7 +24,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
         }
 
         /// <summary>
-        /// Same as <c>ToString</c> but offsets the <see cref="ResourceRecordInfo.DomainName"/>
         /// by <paramref name="offset"/>.
         /// Set the offset to -32 for example to make it print nicely in consols.
         /// </summary>
@@ -38,12 +31,8 @@ namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
         /// <returns>A string representing this instance.</returns>
         public virtual string ToString(int offset = 0)
         {
-            return string.Format("{0," + offset + "}{1} \t{2} \t{3} \t{4}",
-                DomainName,
-                TimeToLive,
-                RecordClass,
-                RecordType,
-                RecordToString());
+            string returnString = $"{DomainName}, {offset}{TimeToLive}\t{RecordClass}\t{RecordType}\t{RecordToString()}";            
+            return returnString;
         }
 
         /// <summary>
@@ -51,6 +40,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
         /// <see cref="ToString(int)"/> uses this to compose the full string value of this instance.
         /// </summary>
         /// <returns>A string representing this record.</returns>
-        private protected abstract string RecordToString();
+        protected abstract string RecordToString();
     }
 }

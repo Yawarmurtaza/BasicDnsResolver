@@ -1,5 +1,7 @@
-﻿namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.DnsProtocol
 {
+    using InfraServiceJobPackage.Library.DnsHelper.Records;
+
     /// <summary>
     /// The query type field appear in the question part of a query.
     /// Query types are a superset of <see cref="ResourceRecordType"/>.

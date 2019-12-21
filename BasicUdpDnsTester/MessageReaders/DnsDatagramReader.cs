@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
-using BasicUdpDnsTester.ConsoleRunner.RequestMessageModel;
-
-namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.MessageReaders
 {
-    public class DnsDatagramReader
+    using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Text;
+    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+
+    public class DnsDatagramReader : IDnsDatagramReader
     {
         public const int IPv4Length = 4;
         private const byte ReferenceByte = 0xc0;
+        
+        private readonly byte[] _ipV4Buffer = new byte[4];
+        private readonly IDnsString dnsString;
 
         private readonly ArraySegment<byte> _data;
         private readonly int _count;
@@ -32,11 +35,12 @@ namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
             }
         }
 
-        public DnsDatagramReader(ArraySegment<byte> data, int startIndex = 0)
+        public DnsDatagramReader(ArraySegment<byte> data, IDnsString dnsString, int startIndex = 0)
         {
             _data = data;
             _count = data.Count;
             Index = startIndex;
+            this.dnsString = dnsString;
         }
 
         public byte ReadByte()
@@ -49,9 +53,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
             {
                 throw new IndexOutOfRangeException($"Cannot read byte {_index}, out of range.");
             }
-        }
-
-        private readonly byte[] _ipV4Buffer = new byte[4];
+        }        
 
         public IPAddress ReadIPAddress()
         {
@@ -77,9 +79,9 @@ namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
         }
 
         // only used by the DnsQuestion as we don't expect any escaped chars in the actual query posted to and send back from the DNS Server (not supported).
-        public DnsString ReadQuestionQueryString()
+        public IDnsString ReadQuestionQueryString()
         {
-            var result = StringBuilderObjectPool.Default.Get();
+            StringBuilder result = StringBuilderObjectPool.Default.Get();
             foreach (var labelArray in ReadLabels())
             {
                 var label = Encoding.UTF8.GetString(labelArray.Array, labelArray.Offset, labelArray.Count);
@@ -89,7 +91,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
 
             string value = result.ToString();
             StringBuilderObjectPool.Default.Return(result);
-            return DnsString.FromResponseQueryString(value);
+            return dnsString.FromResponseQueryString(value);
         }
 
         public ICollection<ArraySegment<byte>> ReadLabels()
@@ -116,8 +118,8 @@ namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
                         continue;
                     }
 
-                    var subReader = new DnsDatagramReader(_data.SubArrayFromOriginal(subIndex));
-                    var newLabels = subReader.ReadLabels();
+                    DnsDatagramReader subReader = new DnsDatagramReader(_data.SubArrayFromOriginal(subIndex), dnsString);
+                    ICollection<ArraySegment<byte>> newLabels = subReader.ReadLabels();
                     result.AddRange(newLabels); // add range actually much faster than Concat and equal to or faster than foreach.. (array copy would work maybe)
                     return result;
                 }
@@ -152,19 +154,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.MessageReaders
         public uint ReadUInt32NetworkOrder()
         {
             return (uint)(ReadUInt16NetworkOrder() << 16 | ReadUInt16NetworkOrder());
-        }
-    }
-
-    internal static class ArraySegmentExtensions
-    {
-        public static ArraySegment<T> SubArray<T>(this ArraySegment<T> array, int startIndex, int length)
-        {
-            return new ArraySegment<T>(array.Array, array.Offset + startIndex, length);
-        }
-
-        public static ArraySegment<T> SubArrayFromOriginal<T>(this ArraySegment<T> array, int startIndex)
-        {
-            return new ArraySegment<T>(array.Array, startIndex, array.Array.Length - startIndex);
         }
     }
 }

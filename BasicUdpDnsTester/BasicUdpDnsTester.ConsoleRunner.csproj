@@ -45,20 +45,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DnsProtocol\AddressRecord.cs" />
-    <Compile Include="DnsProtocol\ARecord.cs" />
-    <Compile Include="DnsProtocol\EmptyRecord.cs" />
+    <Compile Include="Records\AddressRecord.cs" />
+    <Compile Include="Records\ARecord.cs" />
+    <Compile Include="Records\EmptyRecord.cs" />
+    <Compile Include="ICommunicator.cs" />
+    <Compile Include="IDnsResolver.cs" />
+    <Compile Include="IUdpSocketProxy.cs" />
+    <Compile Include="MessageReaders\ArraySegmentExtensions.cs" />
     <Compile Include="MessageReaders\DnsDatagramReader.cs" />
-    <Compile Include="DnsProtocol\DnsResourceRecord.cs" />
+    <Compile Include="Records\DnsResourceRecord.cs" />
     <Compile Include="DnsProtocol\DnsResponseCode.cs" />
-    <Compile Include="DnsProtocol\OptRecord.cs" />
-    <Compile Include="DnsProtocol\ResourceRecordInfo.cs" />
+    <Compile Include="Records\OptRecord.cs" />
+    <Compile Include="Records\BaseResourceRecordInfo.cs" />
     <Compile Include="DnsResolver.cs" />
     <Compile Include="MessageReaders\DnsRecordFactory.cs" />
+    <Compile Include="MessageReaders\IDnsDatagramReader.cs" />
     <Compile Include="MessageReaders\StringBuilderObjectPool.cs" />
     <Compile Include="RequestMessageModel\DnsString.cs" />
+    <Compile Include="RequestMessageModel\IDnsString.cs" />
     <Compile Include="RequestMessageModel\QueryClass.cs" />
-    <Compile Include="ResponseMessageModel\DnsQueryResponse.cs" />
     <Compile Include="ResponseMessageModel\DnsQuerySettings.cs" />
     <Compile Include="ResponseMessageModel\DnsResponseCodeText.cs" />
     <Compile Include="ResponseMessageModel\DnsResponseException.cs" />
@@ -67,7 +72,7 @@
     <Compile Include="MessageWriters\DnsDatagramWriter.cs" />
     <Compile Include="DnsProtocol\DnsHeader.cs" />
     <Compile Include="DnsProtocol\DnsHeaderFlag.cs" />
-    <Compile Include="DnsProtocol\ResourceRecordType.cs" />
+    <Compile Include="Records\ResourceRecordType.cs" />
     <Compile Include="MessageWriters\PooledBytes.cs" />
     <Compile Include="RequestMessageModel\DnsOpCode.cs" />
     <Compile Include="RequestMessageModel\DnsQuestion.cs" />
@@ -77,13 +82,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DnsProtocol\QueryType.cs" />
     <Compile Include="ResponseMessageModel\IDnsQueryResponse.cs" />
-    <Compile Include="ResponseMessageModel\LookupClientAudit.cs" />
     <Compile Include="ResponseMessageModel\NameServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Wrappers\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

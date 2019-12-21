@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
+namespace InfraServiceJobPackage.Library.DnsHelper.DnsProtocol
 {
 
     /*

@@ -1,22 +1,14 @@
 ﻿using System;
-
 using System.Configuration;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
-using BasicUdpDnsTester.ConsoleRunner.RequestMessageModel;
-using BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel;
+using InfraServiceJobPackage.Library.DnsHelper;
+using InfraServiceJobPackage.Library.DnsHelper.Records;
+using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+using InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel;
 
 namespace BasicUdpDnsTester.ConsoleRunner
 {
     class Program
-    {
-        private static int _uniqueId;
-        private static Random _random = new Random();
-        private const int dnsPortNumber = 53;
-
+    {   
         static void Main(string[] args)
         {
             Tuple<string, string> userInput = GetUserInput();
@@ -25,10 +17,12 @@ namespace BasicUdpDnsTester.ConsoleRunner
 
             try
             {
-                DnsResolver resolver = new DnsResolver();
-                IPEndPoint server = new IPEndPoint(IPAddress.Parse(dnsServerIp), dnsPortNumber);
-                DnsRequestMessage dnsRequest = GetDnsRequestMessage(domainName);
-                DnsResponseMessage response = resolver.Query(server, dnsRequest);
+                // use IoC to resolve these...
+                ICommunicator communicator = new UdpCommunicator();
+                IDnsString dnsString = new DnsString();
+                DnsResolver resolver = new DnsResolver(communicator, dnsString);
+
+                DnsResponseMessage response = resolver.Resolve(dnsServerIp, domainName);
                 PrintResult(response);
             }
             catch (Exception e)
@@ -61,30 +55,7 @@ namespace BasicUdpDnsTester.ConsoleRunner
                 dnsServerName = targetDnsServerName;
             }
 
-            string targetDnsServerIpAddress = Dns.GetHostAddresses(dnsServerName).First(ip => ip.AddressFamily == AddressFamily.InterNetwork).ToString();
-            Console.WriteLine($"Using the IP Address [{targetDnsServerIpAddress}] for the target DNS Server.");
-            return new Tuple<string, string>(domainName, targetDnsServerIpAddress);
-        }
-
-        private static DnsRequestMessage GetDnsRequestMessage(string domainNameToResolve)
-        {
-            ushort headerId = GetNextUniqueId();
-            DnsRequestHeader header = new DnsRequestHeader(headerId, true, DnsOpCode.Query);
-            
-            DnsQuestion question = new DnsQuestion(domainNameToResolve, QueryType.A, QueryClass.IN);
-            DnsRequestMessage message = new DnsRequestMessage(header, question);
-            return message;
-        }
-
-        private static ushort GetNextUniqueId()
-        {
-            if (_uniqueId == ushort.MaxValue || _uniqueId == 0)
-            {
-                Interlocked.Exchange(ref _uniqueId, _random.Next(ushort.MaxValue / 2));
-                return (ushort)_uniqueId;
-            }
-
-            return unchecked((ushort)Interlocked.Increment(ref _uniqueId));
+            return new Tuple<string, string>(domainName, dnsServerName);
         }
 
         private static void PrintResult(DnsResponseMessage response)

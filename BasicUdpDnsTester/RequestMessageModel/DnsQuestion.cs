@@ -1,9 +1,8 @@
-﻿using System;
-using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
-using BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel;
-
-namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel
 {
+    using InfraServiceJobPackage.Library.DnsHelper.DnsProtocol;
+    using System;
+
     /// <summary>
     /// The <see cref="DnsQuestion"/> class transports information of the lookup query performed by <see cref="DnsQuery"/>.
     /// <para>
@@ -18,7 +17,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
         /// <value>
         /// The name of the query.
         /// </value>
-        public DnsString QueryName { get; }
+        public IDnsString QueryName { get; }
 
         /// <summary>
         /// Gets the question class.
@@ -43,20 +42,9 @@ namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
         /// <param name="questionType">Type of the question.</param>
         /// <param name="questionClass">The question class.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="query"/> is null.</exception>
-        public DnsQuestion(string query, QueryType questionType, QueryClass questionClass = QueryClass.IN) : this(DnsString.Parse(query), questionType, questionClass)
+        public DnsQuestion(IDnsString query, QueryType questionType, QueryClass questionClass = QueryClass.IN)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DnsQuestion"/> class.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        /// <param name="questionType">Type of the question.</param>
-        /// <param name="questionClass">The question class.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="query"/> is null.</exception>
-        public DnsQuestion(DnsString query, QueryType questionType, QueryClass questionClass = QueryClass.IN)
-        {
-            QueryName = query ?? throw new ArgumentNullException(nameof(query));
+            QueryName = query;
             QuestionType = questionType;
             QuestionClass = questionClass;
         }

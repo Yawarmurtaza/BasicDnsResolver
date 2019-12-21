@@ -1,4 +1,4 @@
-﻿namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.DnsProtocol
 {
     public static class DnsHeader
     {

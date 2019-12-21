@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.Records
 {
     /*
      * RFC 1035 (https://tools.ietf.org/html/rfc1035#section-3.2.3)

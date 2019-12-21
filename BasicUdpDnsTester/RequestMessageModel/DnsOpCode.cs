@@ -1,4 +1,4 @@
-﻿namespace BasicUdpDnsTester.ConsoleRunner.RequestMessageModel
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel
 {
     /*
      *

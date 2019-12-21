@@ -1,8 +1,8 @@
-﻿using System;
-using BasicUdpDnsTester.ConsoleRunner.DnsProtocol;
-
-namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel
 {
+    using System;
+    using InfraServiceJobPackage.Library.DnsHelper.DnsProtocol;
+
     /// <summary>
     /// A DnsClient specific exception transporting additional information about the query causing this exception.
     /// </summary>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 
-namespace BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel
+namespace InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel
 {
     /// <summary>
     /// Represents a name server instance used by <see cref="ILookupClient"/>.

@@ -1,10 +1,6 @@
-﻿using BasicUdpDnsTester.ConsoleRunner.ResponseMessageModel;
-
-namespace BasicUdpDnsTester.ConsoleRunner.DnsProtocol
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.DnsProtocol
 {
-    /// <summary>
-    /// Response codes of the <see cref="IDnsQueryResponse"/>.
-    /// </summary>
+    /// <summary></summary>
     /// <seealso href="https://tools.ietf.org/html/rfc6895#section-2.3">RFC 6895</seealso>
     public enum DnsResponseCode : short
     {
