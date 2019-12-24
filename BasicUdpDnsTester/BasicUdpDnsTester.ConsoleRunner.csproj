@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A239C79A-84A4-41EF-8F7F-D144D948600E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>BasicUdpDnsTester.ConsoleRunner</RootNamespace>
+    <RootNamespace>InfraServiceJobPackage.Library.DnsHelper</RootNamespace>
     <AssemblyName>BasicUdpDnsTester.ConsoleRunner</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MessageReaders\IDnsRecordFactory.cs" />
     <Compile Include="Records\AddressRecord.cs" />
     <Compile Include="Records\ARecord.cs" />
     <Compile Include="Records\EmptyRecord.cs" />

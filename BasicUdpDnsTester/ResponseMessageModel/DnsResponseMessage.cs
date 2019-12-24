@@ -15,7 +15,7 @@
         /// <param name="messageSize"></param>
         public DnsResponseMessage(DnsResponseHeader header, int messageSize)
         {
-            Header = header ?? throw new ArgumentNullException(nameof(header));
+            Header = header;
             MessageSize = messageSize;
         }
 

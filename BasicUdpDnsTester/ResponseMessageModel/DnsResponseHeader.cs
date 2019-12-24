@@ -1,13 +1,11 @@
 ﻿namespace InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel
 {
-    using System.Linq;
     using InfraServiceJobPackage.Library.DnsHelper.DnsProtocol;
     using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+    using System.Linq;
 
-    /// <summary>
-    /// The header section of a <see cref="IDnsQueryResponse"/>.
-    /// </summary>
-    public class  DnsResponseHeader
+    /// <summary>Represents the response header of DNS query.</summary>
+    public class DnsResponseHeader
     {
         private readonly ushort _flags;
 
@@ -17,12 +15,8 @@
         /// <summary> Gets the number of answer records.</summary>
         public int AnswerCount { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance has authority answers.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance has authority answers; otherwise, <c>false</c>.
-        /// </value>
+        /// <summary>Gets a value indicating whether this instance has authority answers.</summary>
+        /// <value><c>true</c> if this instance has authoritative answers; otherwise, <c>false</c>.</value>
         public bool HasAuthorityAnswer => HasFlag(DnsHeaderFlag.HasAuthorityAnswer);
 
         internal DnsHeaderFlag HeaderFlags => (DnsHeaderFlag)_flags;
@@ -32,9 +26,7 @@
         /// The DNS server duplicates this number in the corresponding response. This helps up to pair up the query and response messages.</summary>
         public int Identifier { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether the result is authentic data.
-        /// </summary>
+        /// <summary>Gets a value indicating whether the result is authentic data.</summary>
         /// <value>
         ///   <c>true</c> if the result is authentic; otherwise, <c>false</c>.
         /// </value>
@@ -107,16 +99,13 @@
         /// </value>
         public bool RecursionDesired => HasFlag(DnsHeaderFlag.RecursionDesired);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DnsResponseHeader"/> class.
-        /// </summary>
+        /// <summary>Initializes a new instance of the <see cref="DnsResponseHeader"/> class. </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="flags">The flags.</param>
         /// <param name="questionCount">The question count.</param>
         /// <param name="answerCount">The answer count.</param>
         /// <param name="additionalCount">The additional count.</param>
         /// <param name="serverCount">The server count.</param>
-        //[CLSCompliant(false)]
         public DnsResponseHeader(int id, ushort flags, int questionCount, int answerCount, int additionalCount, int serverCount)
         {
             Identifier = id;
@@ -129,26 +118,22 @@
 
         private bool HasFlag(DnsHeaderFlag flag) => (HeaderFlags & flag) != 0;
 
-        /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
-        /// </returns>
+        /// <summary>Returns a <see cref="System.String" /> that represents this instance.</summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
-            var head = $";; ->>HEADER<<- opcode: {OPCode}, status: {DnsResponseCodeText.GetErrorText(ResponseCode)}, id: {Identifier}";
-            var flags = new string[] {
-                HasQuery ? "qr" : "",
-                HasAuthorityAnswer ? "aa" : "",
-                RecursionDesired ? "rd" : "",
-                RecursionAvailable ? "ra" : "",
-                ResultTruncated ? "tc" : "",
-                IsCheckingDisabled ? "cd" : "",
-                IsAuthenticData ? "ad" : ""
-            };
+            string head = $";; ->>HEADER<<- opcode: {OPCode}, status: {DnsResponseCodeText.GetErrorText(ResponseCode)}, id: {Identifier}";
+            string[] flags = new string[] {
+                                            HasQuery ? "qr" : "",
+                                            HasAuthorityAnswer ? "aa" : "",
+                                            RecursionDesired ? "rd" : "",
+                                            RecursionAvailable ? "ra" : "",
+                                            ResultTruncated ? "tc" : "",
+                                            IsCheckingDisabled ? "cd" : "",
+                                            IsAuthenticData ? "ad" : ""
+                                        };
 
-            var flagsString = string.Join(" ", flags.Where(p => p != ""));
+            string flagsString = string.Join(" ", flags.Where(p => p != ""));
             return $"{head}\r\n;; flags: {flagsString}; QUERY: {QuestionCount}, " +
                    $"ANSWER: {AnswerCount}, AUTORITY: {NameServerCount}, ADDITIONAL: {AdditionalCount}";
         }

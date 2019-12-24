@@ -1,20 +1,24 @@
 ﻿namespace InfraServiceJobPackage.Library.DnsHelper.MessageReaders
 {
     using System;
-    using System.Collections.Generic;
     using System.Net;
-    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+    using RequestMessageModel;
 
     public interface IDnsDatagramReader
     {
-        int Index { get; set; }
+        /// <summary>Gets the index of datagram reader. </summary>
+        int Index { get; }
 
+        /// <summary>Moves the index from its current position to given length. E.g. current = 10, length = 5, index = 15.</summary>
+        /// <param name="length">Length to move index to.</param>
         void Advance(int length);
-        byte ReadByte();
-        IPAddress ReadIPAddress();
-        ICollection<ArraySegment<byte>> ReadLabels();
-        IDnsString ReadQuestionQueryString();
-        ushort ReadUInt16NetworkOrder();
-        uint ReadUInt32NetworkOrder();
+
+        IPAddress ReadIPAddress(ArraySegment<byte> data);
+
+        IDnsString ReadQuestionQueryString(ArraySegment<byte> data);
+        ushort ReadUInt16NetworkOrder(ArraySegment<byte> data);
+
+        uint ReadUInt32NetworkOrder(ArraySegment<byte> data);
+        
     }
 }

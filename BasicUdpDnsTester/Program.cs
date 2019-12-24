@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using InfraServiceJobPackage.Library.DnsHelper;
+using InfraServiceJobPackage.Library.DnsHelper.MessageReaders;
 using InfraServiceJobPackage.Library.DnsHelper.Records;
 using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
 using InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel;
@@ -8,7 +9,7 @@ using InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel;
 namespace BasicUdpDnsTester.ConsoleRunner
 {
     class Program
-    {   
+    {
         static void Main(string[] args)
         {
             Tuple<string, string> userInput = GetUserInput();
@@ -20,7 +21,9 @@ namespace BasicUdpDnsTester.ConsoleRunner
                 // use IoC to resolve these...
                 ICommunicator communicator = new UdpCommunicator();
                 IDnsString dnsString = new DnsString();
-                DnsResolver resolver = new DnsResolver(communicator, dnsString);
+                IDnsDatagramReader reader = new DnsDatagramReader(dnsString);
+
+                DnsResolver resolver = new DnsResolver(communicator, dnsString, reader);
 
                 DnsResponseMessage response = resolver.Resolve(dnsServerIp, domainName);
                 PrintResult(response);

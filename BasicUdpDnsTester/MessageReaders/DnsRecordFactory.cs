@@ -1,10 +1,12 @@
-﻿namespace InfraServiceJobPackage.Library.DnsHelper.MessageReaders
+﻿using System.Net;
+
+namespace InfraServiceJobPackage.Library.DnsHelper.MessageReaders
 {
     using System;
-    using InfraServiceJobPackage.Library.DnsHelper.Records;
-    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+    using Records;
+    using RequestMessageModel;
 
-    public class DnsRecordFactory
+    public class DnsRecordFactory : IDnsRecordFactory
     {
         private readonly IDnsDatagramReader _reader;
 
@@ -35,19 +37,24 @@
         +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
          * */
 
-        public BaseResourceRecordInfo ReadRecordInfo()
+        public BaseResourceRecordInfo ReadRecordInfo(ArraySegment<byte> data)
         {
-            IDnsString readQuestionQueryString = _reader.ReadQuestionQueryString();
-            return new BaseResourceRecordInfo(                
-                (ResourceRecordType)_reader.ReadUInt16NetworkOrder(),   // type
-                (QueryClass)_reader.ReadUInt16NetworkOrder(),           // class
-                (int)_reader.ReadUInt32NetworkOrder(),        // ttl - 32bit!!
-                _reader.ReadUInt16NetworkOrder(), // RDLength
-                readQuestionQueryString            // name
-                );          
+            IDnsString domainName = _reader.ReadQuestionQueryString(data);
+            ResourceRecordType recordType = (ResourceRecordType) _reader.ReadUInt16NetworkOrder(data);
+            QueryClass queryClass = (QueryClass) _reader.ReadUInt16NetworkOrder(data);
+            int timeToLive = (int) _reader.ReadUInt32NetworkOrder(data);
+            int rawDataLength = _reader.ReadUInt16NetworkOrder(data);
+
+            return new BaseResourceRecordInfo(
+                recordType ,    // record type
+                queryClass,     // query class
+                timeToLive,     // ttl - 32bit!!
+                rawDataLength,  // RDLength
+                domainName      // domain name
+            );
         }
 
-        public DnsResourceRecord GetRecord(BaseResourceRecordInfo info)
+        public DnsResourceRecord GetRecord(BaseResourceRecordInfo info, ArraySegment<byte> data)
         {
             if (info == null)
             {
@@ -60,7 +67,8 @@
             switch (info.RecordType)
             {
                 case ResourceRecordType.A:
-                    result = new ARecord(info, _reader.ReadIPAddress());
+                    IPAddress ipaddress = _reader.ReadIPAddress(data);
+                    result = new ARecord(info, ipaddress);
                     break;
                 default:
                     // update reader index because we don't read full data for the empty record

@@ -1,6 +1,7 @@
 ﻿namespace InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel
 {
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
     using InfraServiceJobPackage.Library.DnsHelper.DnsProtocol;
 
     public static class DnsResponseCodeText
@@ -51,12 +52,7 @@
 
         public static string GetErrorText(DnsResponseCode code)
         {
-            if (!errors.ContainsKey(code))
-            {
-                return Unassigned;
-            }
-
-            return errors[code];
+            return errors.ContainsKey(code) ? errors[code] : Unassigned;
         }
     }
 }
