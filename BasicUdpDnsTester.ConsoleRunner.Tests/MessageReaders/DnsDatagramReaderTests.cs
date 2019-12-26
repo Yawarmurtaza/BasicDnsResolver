@@ -7,11 +7,9 @@ namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
     using Moq;
     using NUnit.Framework;
     using System;
-    using System.IO;
-    using System.Reflection;
 
     [TestFixture]
-    public class DnsDatagramReaderTests
+    public class DnsDatagramReaderTests : BaseTestHelper
     {
         private Mock<IDnsString> mockDnsString;
         
@@ -28,7 +26,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
             
             const string query = "microsoft.com";
             const string queryDot = query + ".";
-            ArraySegment<byte> sampleData = GetSampleData("QuestionQuery");
+            ArraySegment<byte> sampleData = GetSampleData(ResponseDataSampleFile.QuestionQuery);
             mockDnsString.Setup(m => m.FromResponseQueryString(queryDot)).Returns(new DnsString(query, queryDot));
             IDnsDatagramReader reader = new DnsDatagramReader(mockDnsString.Object);
 
@@ -64,7 +62,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
         public void ReadUInt16NetworkOrder_should_return_AnswerCount_of_6_from_data_starting_at_Index_0()
         {
             // Arrange.
-            ArraySegment<byte> sampleData = GetSampleData("QuestionQuery");
+            ArraySegment<byte> sampleData = GetSampleData(ResponseDataSampleFile.QuestionQuery);
             IDnsDatagramReader reader = new DnsDatagramReader(mockDnsString.Object);
             reader.Advance(6);
             // Act.
@@ -80,7 +78,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
         public void ReadUInt16NetworkOrder_should_throw_IndexOutOfRangeException_when_index_exceeds_data_count()
         {
             // Arrange.
-            ArraySegment<byte> sampleData = GetSampleData("QuestionQuery");
+            ArraySegment<byte> sampleData = GetSampleData(ResponseDataSampleFile.QuestionQuery);
             IDnsDatagramReader reader = new DnsDatagramReader(mockDnsString.Object);
             reader.Advance(100);
             // Act.
@@ -113,7 +111,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
         public void ReadUInt32NetworkOrder_should_return_TTL_value_in_int32()
         {
             // Arrange.
-            ArraySegment<byte> sampleData = GetSampleData("QuestionAndAnswerQuery");
+            ArraySegment<byte> sampleData = GetSampleData(ResponseDataSampleFile.QuestionAndAnswerQuery);
             IDnsDatagramReader reader = new DnsDatagramReader(mockDnsString.Object);
 
             // advance the index to Time To Live position.
@@ -151,7 +149,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
         public void ReadIPAddress_should_return_ipAddress()
         {
             // Arrange.
-            ArraySegment<byte> sampleData = GetSampleData("QuestionAndAnswerQuery");
+            ArraySegment<byte> sampleData = GetSampleData(ResponseDataSampleFile.QuestionAndAnswerQuery);
             IDnsDatagramReader reader = new DnsDatagramReader(mockDnsString.Object);
             // advance the index to IP Address position.
             reader.Advance(43);
@@ -168,7 +166,7 @@ namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
         public void ReadIPAddress_should_throw_IndexOutOfRangeException_exception_when_less_than_4_bytes_are_present()
         {
             // Arrange.
-            ArraySegment<byte> sampleData = GetSampleData("QuestionQuery");
+            ArraySegment<byte> sampleData = GetSampleData(ResponseDataSampleFile.QuestionQuery);
             IDnsDatagramReader reader = new DnsDatagramReader(mockDnsString.Object);
             // advance the index to IP Address position + 1 to make it throw exception.
             reader.Advance(43);
@@ -177,15 +175,6 @@ namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
             Assert.Throws<IndexOutOfRangeException>(() => reader.ReadIPAddress(sampleData),
                 "Error while reading IPv4 address, expected 4 bytes. Index was outside the bounds of the array.");
 
-        }
-
-        private ArraySegment<byte> GetSampleData(string fileName)
-        {
-            string debugFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string questionQueryDataFilePath = Path.Combine(debugFolder, $@"TestFiles\{fileName}.txt");
-            byte[] bytesData = File.ReadAllBytes(questionQueryDataFilePath);
-            ArraySegment<byte> responseData = new ArraySegment<byte>(bytesData);
-            return responseData;
         }
     }
 }

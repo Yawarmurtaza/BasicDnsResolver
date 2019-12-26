@@ -1,8 +1,7 @@
-﻿using System.Net;
-
-namespace InfraServiceJobPackage.Library.DnsHelper.MessageReaders
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.MessageReaders
 {
     using System;
+    using System.Net;
     using Records;
     using RequestMessageModel;
 
@@ -35,15 +34,15 @@ namespace InfraServiceJobPackage.Library.DnsHelper.MessageReaders
         /                     RDATA                     /
         /                                               /
         +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-         * */
+        */
 
         public BaseResourceRecordInfo ReadRecordInfo(ArraySegment<byte> data)
         {
-            IDnsString domainName = _reader.ReadQuestionQueryString(data);
-            ResourceRecordType recordType = (ResourceRecordType) _reader.ReadUInt16NetworkOrder(data);
-            QueryClass queryClass = (QueryClass) _reader.ReadUInt16NetworkOrder(data);
-            int timeToLive = (int) _reader.ReadUInt32NetworkOrder(data);
-            int rawDataLength = _reader.ReadUInt16NetworkOrder(data);
+            IDnsString domainName = _reader.ReadQuestionQueryString(data);                              // domain name
+            ResourceRecordType recordType = (ResourceRecordType) _reader.ReadUInt16NetworkOrder(data);  // record type
+            QueryClass queryClass = (QueryClass) _reader.ReadUInt16NetworkOrder(data);                  // query class
+            int timeToLive = (int) _reader.ReadUInt32NetworkOrder(data);                                // ttl - 32bit!!
+            int rawDataLength = _reader.ReadUInt16NetworkOrder(data);                                   // RDLength
 
             return new BaseResourceRecordInfo(
                 recordType ,    // record type

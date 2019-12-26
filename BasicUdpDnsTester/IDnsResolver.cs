@@ -1,8 +1,8 @@
 ﻿namespace InfraServiceJobPackage.Library.DnsHelper
 {
     using System.Net;
-    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
-    using InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel;
+    using RequestMessageModel;
+    using ResponseMessageModel;
 
     public interface IDnsResolver
     {

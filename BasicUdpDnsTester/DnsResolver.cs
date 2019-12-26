@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Text;
-
-namespace InfraServiceJobPackage.Library.DnsHelper
+﻿namespace InfraServiceJobPackage.Library.DnsHelper
 {
     using DnsProtocol;
     using MessageReaders;
