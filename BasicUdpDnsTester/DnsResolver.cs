@@ -52,12 +52,19 @@
                 int timeoutInMillis = 5000;
                 clientSocket.ReceiveTimeout = timeoutInMillis;
                 clientSocket.SendTimeout = timeoutInMillis;
-                using (DnsDatagramWriter writer = new DnsDatagramWriter())
+
+                //
+                // write the dns query request data on in bytes to send to the DNS server.
+                //
+                using (IDnsDatagramWriter writer = new DnsDatagramWriter())
                 {
                     ConstructRequestData(dnsRequest, writer);
                     clientSocket.SendTo(writer.Data.Array, 0, writer.Data.Count, SocketFlags.None, server);
                 }
 
+                //
+                // Read the dns query response from the DNS server.
+                //
                 using (PooledBytes memory = new PooledBytes(ReadSize))
                 {
                     int received = clientSocket.Receive(memory.Buffer, 0, ReadSize, SocketFlags.None);
@@ -93,7 +100,7 @@
             return unchecked((ushort)Interlocked.Increment(ref _uniqueId));
         }
 
-        private void ConstructRequestData(DnsRequestMessage request, DnsDatagramWriter writer)
+        private void ConstructRequestData(DnsRequestMessage request, IDnsDatagramWriter writer)
         {
             DnsQuestion question = request.Question;
 

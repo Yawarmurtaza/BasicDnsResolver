@@ -1,18 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using InfraServiceJobPackage.Library.DnsHelper.MessageReaders;
 using InfraServiceJobPackage.Library.DnsHelper.Records;
 using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
 {
+    //[TestFixture]
+    //public class StringBuilderObjectPoolTests
+    //{
+    //    [Test]
+    //    public void GetTest()
+    //    {
+    //        // Arrange.
+    //        IStringBuilderObjectPool stringBuilder = new StringBuilderObjectPool();
+
+    //        // Act.
+    //        StringBuilder result = stringBuilder.Get();
+    //        StringBuilder result2 = stringBuilder.Get();
+    //        StringBuilder result3 = stringBuilder.Get();
+
+    //        // Assert.
+    //        Assert.IsNotNull(result);
+    //    }
+    //}
+
     [TestFixture]
     public class DnsRecordFactoryTests : BaseTestHelper
     {

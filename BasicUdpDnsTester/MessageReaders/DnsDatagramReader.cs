@@ -10,6 +10,7 @@
     {
         private const byte ReferenceByte = 0xc0;
         private readonly IDnsString dnsString;
+        //private readonly IStringBuilderObjectPool stringBuilder;
 
         /// <summary>Gets the index of datagram reader. </summary>
         public int Index { get; private set; }
@@ -17,6 +18,7 @@
         public DnsDatagramReader(IDnsString dnsString)
         {
             this.dnsString = dnsString;
+            //this.stringBuilder = stringBuilder;
             Index = 0;
         }
 
@@ -42,7 +44,8 @@
         // only used by the DnsQuestion as we don't expect any escaped chars in the actual query posted to and send back from the DNS Server (not supported).
         public IDnsString ReadQuestionQueryString(ArraySegment<byte> data)
         {
-            StringBuilder result = StringBuilderObjectPool.Default.Get();
+            // StringBuilder result = stringBuilder.Get();
+            StringBuilder result = new StringBuilder();
             foreach (ArraySegment<byte> labelArray in ReadLabels(data))
             {
                 string label = Encoding.UTF8.GetString(labelArray.Array, labelArray.Offset, labelArray.Count);
@@ -51,7 +54,7 @@
             }
 
             string value = result.ToString();
-            StringBuilderObjectPool.Default.Return(result);
+            // stringBuilder.Return(result);
             return dnsString.FromResponseQueryString(value);
         }
 

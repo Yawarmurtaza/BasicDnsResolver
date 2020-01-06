@@ -1,7 +1,7 @@
 ﻿namespace InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel
 {
-    using InfraServiceJobPackage.Library.DnsHelper.DnsProtocol;
-    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+    using DnsProtocol;
+    using RequestMessageModel;
     using System.Linq;
 
     /// <summary>Represents the response header of DNS query.</summary>
@@ -32,33 +32,25 @@
         /// </value>
         public bool IsAuthenticData => HasFlag(DnsHeaderFlag.IsAuthenticData);
 
-        /// <summary>
-        /// Gets a value indicating whether checking is disabled.
-        /// </summary>
+        /// <summary> Gets a value indicating whether checking is disabled. </summary>
         /// <value>
         ///   <c>true</c> if checking is disabled; otherwise, <c>false</c>.
         /// </value>
         public bool IsCheckingDisabled => HasFlag(DnsHeaderFlag.IsCheckingDisabled);
 
-        /// <summary>
-        /// Gets a value indicating whether this instance has a query.
-        /// </summary>
+        /// <summary> Gets a value indicating whether this instance has a query. </summary>
         /// <value>
         ///   <c>true</c> if this instance has a query; otherwise, <c>false</c>.
         /// </value>
         public bool HasQuery => HasFlag(DnsHeaderFlag.HasQuery);
 
-        /// <summary>
-        /// Gets the number of name servers.
-        /// </summary>
+        /// <summary> Gets the number of name servers. </summary>
         /// <value>
         /// The number of name servers.
         /// </value>
         public int NameServerCount { get; }
 
-        /// <summary>
-        /// Gets the kind of query defined by <see cref="DnsOpCode"/>.
-        /// </summary>
+        /// <summary> Gets the kind of query defined by DnsOpCode. </summary>
         /// <value>
         /// The query kind.
         /// </value>
@@ -67,39 +59,31 @@
         /// <summary> Gets the number of questions records. </summary>
         public int QuestionCount { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether recursion is available on the DNS server.
-        /// </summary>
+        /// <summary> Gets a value indicating whether recursion is available on the DNS server. </summary>
         /// <value>
         ///   <c>true</c> if recursion is available; otherwise, <c>false</c>.
         /// </value>
         public bool RecursionAvailable => HasFlag(DnsHeaderFlag.RecursionAvailable);
 
-        /// <summary>
-        /// Gets the response code.
-        /// </summary>
+        /// <summary> Gets the response code. </summary>
         /// <value>
         /// The response code.
         /// </value>
         public DnsResponseCode ResponseCode => (DnsResponseCode)(_flags & DnsHeader.RCodeMask);
 
-        /// <summary>
-        /// Gets a value indicating whether the result was truncated.
-        /// </summary>
+        /// <summary> Gets a value indicating whether the result was truncated. </summary>
         /// <value>
         ///   <c>true</c> if the result was truncated; otherwise, <c>false</c>.
         /// </value>
         public bool ResultTruncated => HasFlag(DnsHeaderFlag.ResultTruncated);
 
-        /// <summary>
-        /// Gets a value indicating whether recursion desired flag was set by the request.
-        /// </summary>
+        /// <summary> Gets a value indicating whether recursion desired flag was set by the request. </summary>
         /// <value>
         ///   <c>true</c> if the recursion desired flag was set; otherwise, <c>false</c>.
         /// </value>
         public bool RecursionDesired => HasFlag(DnsHeaderFlag.RecursionDesired);
 
-        /// <summary>Initializes a new instance of the <see cref="DnsResponseHeader"/> class. </summary>
+        /// <summary>Initializes a new instance of the DnsResponseHeader class. </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="flags">The flags.</param>
         /// <param name="questionCount">The question count.</param>
@@ -118,8 +102,8 @@
 
         private bool HasFlag(DnsHeaderFlag flag) => (HeaderFlags & flag) != 0;
 
-        /// <summary>Returns a <see cref="System.String" /> that represents this instance.</summary>
-        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        /// <summary>Returns a string that represents this instance.</summary>
+        /// <returns>A string that represents this instance.</returns>
         public override string ToString()
         {
             string head = $";; ->>HEADER<<- opcode: {OPCode}, status: {DnsResponseCodeText.GetErrorText(ResponseCode)}, id: {Identifier}";

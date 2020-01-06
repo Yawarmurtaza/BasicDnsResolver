@@ -1,6 +1,6 @@
 ﻿namespace InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel
 {
-    using InfraServiceJobPackage.Library.DnsHelper.DnsProtocol;
+    using DnsProtocol;
 
     public class DnsRequestHeader
     {

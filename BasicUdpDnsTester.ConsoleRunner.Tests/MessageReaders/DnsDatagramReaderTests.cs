@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text;
 
 namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
 {
@@ -12,11 +13,15 @@ namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
     public class DnsDatagramReaderTests : BaseTestHelper
     {
         private Mock<IDnsString> mockDnsString;
+        //private Mock<IStringBuilderObjectPool> mockStringbuilder;
         
         [SetUp]
         public void Setup()
         {
             mockDnsString = new Mock<IDnsString>();
+            //mockStringbuilder = new Mock<IStringBuilderObjectPool>();
+            //mockStringbuilder.Setup(m => m.Get()).Returns(new StringBuilder());
+            //mockStringbuilder.Setup(m => m.Return(It.IsAny<StringBuilder>()));
         }
 
         [Test]
@@ -28,6 +33,8 @@ namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
             const string queryDot = query + ".";
             ArraySegment<byte> sampleData = GetSampleData(ResponseDataSampleFile.QuestionQuery);
             mockDnsString.Setup(m => m.FromResponseQueryString(queryDot)).Returns(new DnsString(query, queryDot));
+            
+
             IDnsDatagramReader reader = new DnsDatagramReader(mockDnsString.Object);
 
             // move the index to 12th byte where the query starts in the response data.

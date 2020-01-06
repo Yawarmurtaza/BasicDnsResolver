@@ -1,6 +1,6 @@
 ﻿namespace InfraServiceJobPackage.Library.DnsHelper.Records
 {
-    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+    using RequestMessageModel;
 
     public class OptRecord : DnsResourceRecord
     {

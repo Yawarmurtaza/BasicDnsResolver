@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MessageReaders\IDnsRecordFactory.cs" />
+    <Compile Include="MessageReaders\IStringBuilderObjectPool.cs" />
+    <Compile Include="MessageWriters\IDnsDatagramWriter.cs" />
     <Compile Include="Records\AddressRecord.cs" />
     <Compile Include="Records\ARecord.cs" />
     <Compile Include="Records\EmptyRecord.cs" />
@@ -89,8 +91,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Wrappers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

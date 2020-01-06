@@ -1,72 +1,75 @@
-﻿using System.Text;
-using System.Threading;
-
-namespace InfraServiceJobPackage.Library.DnsHelper.MessageReaders
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.MessageReaders
 {
-    public class StringBuilderObjectPool
-    {
-        private readonly StringBuilder[] _items;
-        private readonly int _initialCapacity;
-        private readonly int _maxPooledCapacity;
-        private StringBuilder _fastAccess;
+    //using System.Text;
+    //using System.Threading;
 
-        public static StringBuilderObjectPool Default { get; } = new StringBuilderObjectPool();
+    //public class StringBuilderObjectPool : IStringBuilderObjectPool
+    //{
+    //    private readonly StringBuilder[] _items;
 
-        public StringBuilderObjectPool(int pooledItems = 16, int initialCapacity = 200, int maxPooledCapacity = 1024 * 2)
-        {
-            _items = new StringBuilder[pooledItems];
-            _initialCapacity = initialCapacity;
-            _maxPooledCapacity = maxPooledCapacity;
-            _fastAccess = Create();
-        }
+    //    /// <summary>
+    //    /// Gets or sets the maximum number of characters that can be contained in the memory allocated by the current instance.
+    //    /// </summary>
+    //    private readonly int _initialCapacity;
+    //    private readonly int _maxPooledCapacity;
+    //    private StringBuilder _fastAccess;
 
-        public StringBuilder Get()
-        {
-            //return Create();
-            var found = _fastAccess;
+    //    // public static StringBuilderObjectPool Default { get; } = new StringBuilderObjectPool();
 
-            if (found == null || Interlocked.CompareExchange(ref _fastAccess, null, found) != found)
-            {
-                for (var i = 0; i < _items.Length; i++)
-                {
-                    found = _items[i];
+    //    public StringBuilderObjectPool(int pooledItems = 16, int initialCapacity = 200, int maxPooledCapacity = 1024 * 2)
+    //    {
+    //        _items = new StringBuilder[pooledItems];
+    //        _initialCapacity = initialCapacity;
+    //        _maxPooledCapacity = maxPooledCapacity;
+    //        _fastAccess = Create();
+    //    }
 
-                    if (found != null && Interlocked.CompareExchange(ref _items[i], null, found) == found)
-                    {
-                        return found;
-                    }
-                }
-            }
+    //    public StringBuilder Get()
+    //    {
+    //        StringBuilder found = _fastAccess;
 
-            return found ?? Create();
-        }
+    //        if (found == null || Interlocked.CompareExchange<StringBuilder>(ref _fastAccess, null, found) != found)
+    //        {
+    //            for (var i = 0; i < _items.Length; i++)
+    //            {
+    //                found = _items[i];
 
-        public void Return(StringBuilder value)
-        {
-            if (value == null || value.Capacity > _maxPooledCapacity)
-            {
-                return;
-            }
+    //                if (found != null && Interlocked.CompareExchange(ref _items[i], null, found) == found)
+    //                {
+    //                    return found;
+    //                }
+    //            }
+    //        }
 
-            value.Clear();
+    //        return found == null ? Create() : null;
+    //    }
 
-            if (_fastAccess == null && Interlocked.CompareExchange(ref _fastAccess, value, null) == null)
-            {
-                return;
-            }
+    //    public void Return(StringBuilder value)
+    //    {
+    //        if (value == null || value.Capacity > _maxPooledCapacity)
+    //        {
+    //            return;
+    //        }
 
-            for (var i = 0; i < _items.Length; i++)
-            {
-                if (Interlocked.CompareExchange(ref _items[i], value, null) == null)
-                {
-                    return;
-                }
-            }
-        }
+    //        value.Clear();
 
-        private StringBuilder Create()
-        {
-            return new StringBuilder(_initialCapacity);
-        }
-    }
+    //        if (_fastAccess == null && Interlocked.CompareExchange(ref _fastAccess, value, null) == null)
+    //        {
+    //            return;
+    //        }
+
+    //        for (var i = 0; i < _items.Length; i++)
+    //        {
+    //            if (Interlocked.CompareExchange(ref _items[i], value, null) == null)
+    //            {
+    //                return;
+    //            }
+    //        }
+    //    }
+
+    //    private StringBuilder Create()
+    //    {
+    //        return new StringBuilder(_initialCapacity);
+    //    }
+    //}
 }

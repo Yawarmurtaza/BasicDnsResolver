@@ -1,27 +1,13 @@
 ﻿using InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BasicUdpDnsTester.ConsoleRunner.Tests.ResponseMessageModel
 {
     [TestFixture]
     public class NameServerTests
     {
-
-        private NameServer ns;
-
-
-        [TearDown]
-        public void TearDown()
-        {
-            ns = null;
-        }
 
         [Test]
         public void Implicit_should_be_able_to_return_a_non_null_NameServer_object_when_newedup_using_IPEndpoint()

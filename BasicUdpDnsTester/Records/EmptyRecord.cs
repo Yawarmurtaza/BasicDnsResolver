@@ -1,15 +1,9 @@
 ﻿namespace InfraServiceJobPackage.Library.DnsHelper.Records
 {
-    /// <summary>
-    /// A <see cref="DnsResourceRecord"/> not representing any specifc resource record.
-    /// Used if unsupported <see cref="ResourceRecordType"/>s are found in the result.
-    /// </summary>
-    /// <seealso cref="DnsResourceRecord" />
+    /// <summary> A DnsResourceRecord not representing any specific resource record. Used if unsupported ResourceRecordTypes are found in the result. </summary>
     public class EmptyRecord : DnsResourceRecord
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EmptyRecord"/> class.
-        /// </summary>
+        /// <summary> Initializes a new instance of the <see cref="EmptyRecord"/> class. </summary>
         /// <param name="info">The information.</param>
         /// <exception cref="System.ArgumentNullException">If <paramref name="info"/> is null.</exception>
         public EmptyRecord(BaseResourceRecordInfo info) : base(info)

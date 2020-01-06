@@ -1,11 +1,8 @@
-﻿using System;
-
-namespace InfraServiceJobPackage.Library.DnsHelper.Records
+﻿namespace InfraServiceJobPackage.Library.DnsHelper.Records
 {
-    /// <summary>
-    /// Base class for all DNS resource records.
-    /// </summary>
-    /// <seealso cref="ResourceRecordInfo" />
+    using System;
+
+    /// <summary> Base class for all DNS resource records. </summary>
     public abstract class DnsResourceRecord : BaseResourceRecordInfo
     {
         /// <summary>
@@ -20,13 +17,10 @@ namespace InfraServiceJobPackage.Library.DnsHelper.Records
         /// <inheritdoc />
         public override string ToString()
         {
-            return ToString(0);
+            return ToString();
         }
 
-        /// <summary>
-        /// by <paramref name="offset"/>.
-        /// Set the offset to -32 for example to make it print nicely in consols.
-        /// </summary>
+        /// <summary> by <paramref name="offset"/>. Set the offset to -32 for example to make it print nicely in console. </summary>
         /// <param name="offset">The offset.</param>
         /// <returns>A string representing this instance.</returns>
         public virtual string ToString(int offset = 0)
@@ -35,9 +29,7 @@ namespace InfraServiceJobPackage.Library.DnsHelper.Records
             return returnString;
         }
 
-        /// <summary>
-        /// Returns a string representation of the record's value only.
-        /// <see cref="ToString(int)"/> uses this to compose the full string value of this instance.
+        /// <summary> Returns a string representation of the record's value only. <see cref="ToString(int)"/> uses this to compose the full string value of this instance.
         /// </summary>
         /// <returns>A string representing this record.</returns>
         protected abstract string RecordToString();

@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using InfraServiceJobPackage.Library.DnsHelper;
 using InfraServiceJobPackage.Library.DnsHelper.MessageReaders;
 using InfraServiceJobPackage.Library.DnsHelper.Records;
@@ -12,21 +16,28 @@ namespace BasicUdpDnsTester.ConsoleRunner
     {
         static void Main(string[] args)
         {
+            
             Tuple<string, string> userInput = GetUserInput();
             string domainName = userInput.Item1;
             string dnsServerIp = userInput.Item2;
 
             try
             {
-                // use IoC to resolve these...
-                ICommunicator communicator = new UdpCommunicator();
-                IDnsString dnsString = new DnsString();
-                IDnsDatagramReader reader = new DnsDatagramReader(dnsString);
 
-                DnsResolver resolver = new DnsResolver(communicator, dnsString, reader);
+                for (int i = 0; i < 100; i++)
+                {
+                    // use IoC to resolve these...
+                    ICommunicator communicator = new UdpCommunicator();
+                    IDnsString dnsString = new DnsString();
+                    //IStringBuilderObjectPool stringBuilder = new StringBuilderObjectPool();
+                    IDnsDatagramReader reader = new DnsDatagramReader(dnsString);
 
-                DnsResponseMessage response = resolver.Resolve(dnsServerIp, domainName);
-                PrintResult(response);
+                    DnsResolver resolver = new DnsResolver(communicator, dnsString, reader);
+
+                    DnsResponseMessage response = resolver.Resolve(dnsServerIp, domainName);
+                    PrintResult(response);
+                }
+
             }
             catch (Exception e)
             {
@@ -36,12 +47,38 @@ namespace BasicUdpDnsTester.ConsoleRunner
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
         }
+        public static string GetDnsAddresses()
+        {
+            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (NetworkInterface adapter in adapters)
+            {
+
+                IPInterfaceProperties adapterProperties = adapter.GetIPProperties();
+                IPAddressCollection dnsServers = adapterProperties.DnsAddresses;
+                IPAddress ipv4Dns = dnsServers.First(s => s.AddressFamily == AddressFamily.InterNetwork);
+                return ipv4Dns.ToString();
+
+                //if (dnsServers.Count > 0)
+                //{
+                //    Console.WriteLine(adapter.Description);
+                //    foreach (IPAddress dns in dnsServers)
+                //    {
+                //        Console.WriteLine("  DNS Servers ............................. : {0}", dns.ToString());
+                //    }
+                //    Console.WriteLine();
+                //}
+            }
+
+            return null;
+        }
 
         private static Tuple<string, string> GetUserInput()
         {
             AppSettingsReader appSettings = new AppSettingsReader();
             string dn = appSettings.GetValue("DomainNameToResolve", typeof(string)).ToString();
-            string targetDnsServerName = appSettings.GetValue("TargetDnsServerName", typeof(string)).ToString();
+
+            // string targetDnsServerName = appSettings.GetValue("TargetDnsServerName", typeof(string)).ToString();
+            string targetDnsServerName = GetDnsAddresses();
 
             Console.WriteLine($"Domain Name to resolve defaults to {dn}");
 

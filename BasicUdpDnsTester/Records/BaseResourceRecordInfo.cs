@@ -1,7 +1,7 @@
 ﻿namespace InfraServiceJobPackage.Library.DnsHelper.Records
 {
     using System;
-    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+    using RequestMessageModel;
 
     /// <summary>Base type for resource records.</summary>
     public class BaseResourceRecordInfo
@@ -28,7 +28,7 @@
                     return 0;
                 }
 
-                var ttl = InitialTimeToLive - ((curTicks - ticks) / 1000);
+                int ttl = InitialTimeToLive - (curTicks - ticks) / 1000;
                 return ttl < 0 ? 0 : ttl;
             }
         }

@@ -1,8 +1,7 @@
 ﻿namespace InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel
 {
     using System.Collections.Generic;
-    using System.Runtime.CompilerServices;
-    using InfraServiceJobPackage.Library.DnsHelper.DnsProtocol;
+    using DnsProtocol;
 
     public static class DnsResponseCodeText
     {

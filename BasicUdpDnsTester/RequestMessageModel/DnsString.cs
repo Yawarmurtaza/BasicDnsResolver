@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel
 {
-    /// <summary>The <see cref="DnsString"/> type is used to normalize and validate domain names and labels.</summary>
+    /// <summary>The DnsString type is used to normalize and validate domain names and labels.</summary>
     public class DnsString : IDnsString
     {
         private const char Dot = '.';

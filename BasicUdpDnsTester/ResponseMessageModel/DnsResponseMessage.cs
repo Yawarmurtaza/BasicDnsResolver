@@ -2,8 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using InfraServiceJobPackage.Library.DnsHelper.Records;
-    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+    using Records;
+    using RequestMessageModel;
 
     public class DnsResponseMessage
     {

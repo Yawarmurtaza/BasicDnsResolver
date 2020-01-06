@@ -4,17 +4,14 @@ using System.Text;
 
 namespace InfraServiceJobPackage.Library.DnsHelper.MessageWriters
 {
-    public class DnsDatagramWriter : IDisposable
+    public class DnsDatagramWriter : IDnsDatagramWriter
     {
-        // queries can only be 255 octets + some header bytes, so that size is pretty safe...
-        public const int BufferSize = 1024;
-
+        /// <summary> Queries can only be 255 octets + some header bytes, so that size is pretty safe... </summary>
+        private const int BufferSize = 1024;
         private const byte DotByte = 46;
-
         private readonly PooledBytes _pooledBytes;
-
         private ArraySegment<byte> _buffer;
-
+        private int Index;
         public ArraySegment<byte> Data
         {
             get
@@ -22,8 +19,6 @@ namespace InfraServiceJobPackage.Library.DnsHelper.MessageWriters
                 return new ArraySegment<byte>(_buffer.Array, 0, Index);
             }
         }
-
-        public int Index { get; set; }
 
         public DnsDatagramWriter()
         {
@@ -47,7 +42,7 @@ namespace InfraServiceJobPackage.Library.DnsHelper.MessageWriters
                 if (b == DotByte)
                 {
                     WriteByte((byte)(index - lastOctet)); // length
-                    WriteBytes(bytes, lastOctet, index - lastOctet);
+                    WriteBytes(bytes, lastOctet, index - lastOctet); // label e.g. www e.g. microsoft e.g. com 
                     lastOctet = index + 1;
                 }
 
@@ -57,32 +52,10 @@ namespace InfraServiceJobPackage.Library.DnsHelper.MessageWriters
             WriteByte(0);
         }
 
-        public void WriteByte(byte b)
-        {
-            _buffer.Array[_buffer.Offset + Index++] = b;
-        }
-
-        public void WriteBytes(byte[] data, int length)
-        {
-            WriteBytes(data, 0, length);
-        }
-
-        public void WriteBytes(byte[] data, int dataOffset, int length)
-        {
-            Buffer.BlockCopy(data, dataOffset, _buffer.Array, _buffer.Offset + Index, length);
-
-            Index += length;
-        }
-
         public void WriteInt16NetworkOrder(short value)
         {
-            byte[] bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder(value));
-            WriteBytes(bytes, bytes.Length);
-        }
-
-        public void WriteInt32NetworkOrder(int value)
-        {
-            byte[] bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder(value));
+            short s = IPAddress.HostToNetworkOrder(value);
+            byte[] bytes = BitConverter.GetBytes(s);
             WriteBytes(bytes, bytes.Length);
         }
 
@@ -93,7 +66,8 @@ namespace InfraServiceJobPackage.Library.DnsHelper.MessageWriters
 
         public void WriteUInt32NetworkOrder(uint value)
         {
-            WriteInt32NetworkOrder((int)value);
+            byte[] bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((int)value));
+            WriteBytes(bytes, bytes.Length);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -107,6 +81,24 @@ namespace InfraServiceJobPackage.Library.DnsHelper.MessageWriters
         public void Dispose()
         {
             Dispose(true);
+        }
+
+        /// <summary>Writes one byte in the buffer array (byte[]) in current position of index and increments the index.</summary>
+        /// <param name="b">The byte to write in the buffer (byte[]).</param>
+        private void WriteByte(byte b)
+        {
+            _buffer.Array[_buffer.Offset + Index++] = b;
+        }
+
+        private void WriteBytes(byte[] data, int length)
+        {
+            WriteBytes(data, 0, length);
+        }
+
+        private void WriteBytes(byte[] data, int dataOffset, int length)
+        {
+            Buffer.BlockCopy(data, dataOffset, _buffer.Array, _buffer.Offset + Index, length);
+            Index += length;
         }
     }
 }

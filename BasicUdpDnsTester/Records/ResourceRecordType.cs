@@ -29,28 +29,18 @@
 
      * */
 
-    /// <summary>
-    /// The resource record types. The <c>enum</c> contains only the types supported by this library at this moment.
-    /// The <see cref="ResourceRecordType"/> is used to identify any <see cref="DnsResourceRecord"/>.
-    /// </summary>
-    /// <para>
-    /// Resource record types are a subset of <see cref="QueryType"/>.
-    /// </para>
-    /// </summary>
+    /// <summary> The resource record types. The <c>enum</c> contains only the types supported by this library at this moment. The ResourceRecordType is used to identify any DnsResourceRecord/>. </summary>
+    /// <para> Resource record types are a subset of QueryType. </para>
     /// <seealso cref="DnsResourceRecord"/>
     /// <seealso cref="ResourceRecordType"/>
     public enum ResourceRecordType : short
     {
-        /// <summary>
-        /// A host address.
-        /// </summary>
+        /// <summary> A host address. </summary>
         /// <seealso href="https://tools.ietf.org/html/rfc1035">RFC 1035</seealso>
         /// <seealso cref="ARecord"/>
         A = 1,
 
-        /// <summary>
-        /// Option record.
-        /// </summary>
+        /// <summary> Option record. </summary>
         /// <seealso href="https://tools.ietf.org/html/rfc6891">RFC 6891</seealso>
         /// <seealso cref="OptRecord"/>
         OPT = 41
