@@ -27,12 +27,12 @@ namespace BasicUdpDnsTester.ConsoleRunner
                 for (int i = 0; i < 100; i++)
                 {
                     // use IoC to resolve these...
-                    ICommunicator communicator = new UdpCommunicator();
+                    IUdpCommunicator communicator = new UdpCommunicator();
                     IDnsString dnsString = new DnsString();
                     //IStringBuilderObjectPool stringBuilder = new StringBuilderObjectPool();
                     IDnsDatagramReader reader = new DnsDatagramReader(dnsString);
-
-                    DnsResolver resolver = new DnsResolver(communicator, dnsString, reader);
+                    INetworkMessageProcessor messageProcessor = new DnsQueryMessageProcessor(reader, dnsString);
+                    DnsResolver resolver = new DnsResolver(communicator, messageProcessor);
 
                     DnsResponseMessage response = resolver.Resolve(dnsServerIp, domainName);
                     PrintResult(response);

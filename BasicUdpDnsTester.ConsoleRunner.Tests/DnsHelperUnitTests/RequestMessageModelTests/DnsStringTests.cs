@@ -1,8 +1,8 @@
-﻿using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+﻿using System;
+using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
 using NUnit.Framework;
-using System;
 
-namespace BasicUdpDnsTester.ConsoleRunner.Tests.RequestMessageModelTests
+namespace InfraServiceJobPackageUnitTest.DnsHelperUnitTests.RequestMessageModelTests
 {
     [TestFixture]
     public class DnsStringTests

@@ -1,46 +1,38 @@
 ﻿namespace InfraServiceJobPackage.Library.DnsHelper
 {
-    using DnsProtocol;
-    using MessageReaders;
     using MessageWriters;
     using Records;
     using RequestMessageModel;
     using ResponseMessageModel;
-    using System;
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
-    using System.Threading;
 
     public class DnsResolver : IDnsResolver
-    {
-        private const int dnsPortNumber = 53;
-        private int _uniqueId;
-        private Random _random = new Random();
+    {   
+        private const int dnsPortNumber53 = 53;
         private const int ReadSize = 4096;
-        private readonly ICommunicator communicator;
-        private readonly IDnsString dnsString;
-        private readonly IDnsDatagramReader reader;
 
-        public DnsResolver(ICommunicator communicator, IDnsString dnsString, IDnsDatagramReader reader)
+        private readonly IUdpCommunicator communicator;
+        private readonly INetworkMessageProcessor messageProcessor;
+
+        public DnsResolver(IUdpCommunicator communicator, INetworkMessageProcessor messageProcessor)
         {
             this.communicator = communicator;
-            this.dnsString = dnsString;
-            this.reader = reader;
+            this.messageProcessor = messageProcessor;
         }
 
         public DnsResponseMessage Resolve(string dseServerName, string domainNameToResolve)
         {
             string targetDnsServerIpAddress = Dns.GetHostAddresses(dseServerName).First(ip => ip.AddressFamily == AddressFamily.InterNetwork).ToString();
-            IPEndPoint server = new IPEndPoint(IPAddress.Parse(targetDnsServerIpAddress), dnsPortNumber);
-
-            DnsRequestMessage request = GetDnsRequestMessage(domainNameToResolve);
+            IPEndPoint server = new IPEndPoint(IPAddress.Parse(targetDnsServerIpAddress), dnsPortNumber53);
+            DnsRequestMessage request = messageProcessor.ProcessRequest(domainNameToResolve);
             return Resolve(server, request);
         }
 
         public DnsResponseMessage Resolve(IPEndPoint server, string domainNameToResolve)
         {
-            DnsRequestMessage request = GetDnsRequestMessage(domainNameToResolve);
+            DnsRequestMessage request = messageProcessor.ProcessRequest(domainNameToResolve);
             return Resolve(server, request);
         }
 
@@ -48,7 +40,7 @@
         {
             using (communicator)
             {
-                IUdpSocketProxy clientSocket = communicator.Client;
+                IUdpAdapter clientSocket = communicator.Client;
                 int timeoutInMillis = 5000;
                 clientSocket.ReceiveTimeout = timeoutInMillis;
                 clientSocket.SendTimeout = timeoutInMillis;
@@ -68,38 +60,16 @@
                 using (PooledBytes memory = new PooledBytes(ReadSize))
                 {
                     int received = clientSocket.Receive(memory.Buffer, 0, ReadSize, SocketFlags.None);
-                    DnsResponseMessage response = GetResponseMessage(memory.BufferSegment);
+                    DnsResponseMessage response = messageProcessor.ProcessResponse(memory.BufferSegment);
                     if (dnsRequest.Header.Identifier != response.Header.Identifier)
                     {
                         throw new DnsResponseException("Header id mismatch.");
                     }
 
                     return response;
-                }
+                }   
             }           
         }
-
-        private DnsRequestMessage GetDnsRequestMessage(string domainNameToResolve)
-        {
-            ushort headerId = GetNextUniqueId();
-            DnsRequestHeader header = new DnsRequestHeader(headerId, true, DnsOpCode.Query);
-
-            DnsQuestion question = new DnsQuestion(dnsString.Parse(domainNameToResolve), QueryType.A, QueryClass.IN);
-            DnsRequestMessage message = new DnsRequestMessage(header, question);
-            return message;
-        }
-
-        private ushort GetNextUniqueId()
-        {
-            if (_uniqueId == ushort.MaxValue || _uniqueId == 0)
-            {
-                Interlocked.Exchange(ref _uniqueId, _random.Next(ushort.MaxValue / 2));
-                return (ushort)_uniqueId;
-            }
-
-            return unchecked((ushort)Interlocked.Increment(ref _uniqueId));
-        }
-
         private void ConstructRequestData(DnsRequestMessage request, IDnsDatagramWriter writer)
         {
             DnsQuestion question = request.Question;
@@ -156,58 +126,5 @@
             writer.WriteUInt16NetworkOrder(0);
         }
 
-        private DnsResponseMessage GetResponseMessage(ArraySegment<byte> responseData)
-        {
-            IDnsRecordFactory factory = new DnsRecordFactory(reader);
-
-            /*
-             * From index 0 till 11 bytes in the responseData array, we have the header items.             
-             */
-            ushort id = reader.ReadUInt16NetworkOrder(responseData);
-            ushort flags = reader.ReadUInt16NetworkOrder(responseData);
-            ushort questionCount = reader.ReadUInt16NetworkOrder(responseData);
-            ushort answerCount = reader.ReadUInt16NetworkOrder(responseData);
-            ushort nameServerCount = reader.ReadUInt16NetworkOrder(responseData);
-            ushort additionalCount = reader.ReadUInt16NetworkOrder(responseData);
-
-            /*
-             * We have got above data, now build the response header. 
-             */
-            DnsResponseHeader header = new DnsResponseHeader(id, flags, questionCount, answerCount, additionalCount, nameServerCount);
-            DnsResponseMessage response = new DnsResponseMessage(header, responseData.Count);
-
-            /*
-             * Next item in the response data is question that we sent to the DNS server which the server has copied onto the response message.             
-             */
-            for (int questionIndex = 0; questionIndex < questionCount; questionIndex++)
-            {
-                IDnsString questionString = reader.ReadQuestionQueryString(responseData);
-                DnsQuestion question = new DnsQuestion(questionString, (QueryType)reader.ReadUInt16NetworkOrder(responseData), (QueryClass)reader.ReadUInt16NetworkOrder(responseData));
-                response.AddQuestion(question);
-            }
-
-            for (int answerIndex = 0; answerIndex < answerCount; answerIndex++)
-            {
-                BaseResourceRecordInfo info = factory.ReadRecordInfo(responseData);
-                DnsResourceRecord record = factory.GetRecord(info, responseData);
-                response.AddAnswer(record);
-            }
-
-            for (int serverIndex = 0; serverIndex < nameServerCount; serverIndex++)
-            {
-                BaseResourceRecordInfo info = factory.ReadRecordInfo(responseData);
-                DnsResourceRecord record = factory.GetRecord(info, responseData);
-                response.AddAuthority(record);
-            }
-
-            for (int additionalIndex = 0; additionalIndex < additionalCount; additionalIndex++)
-            {
-                BaseResourceRecordInfo info = factory.ReadRecordInfo(responseData);
-                DnsResourceRecord record = factory.GetRecord(info, responseData);
-                response.AddAdditional(record);
-            }
-
-            return response;
-        }
     }
 }

@@ -9,8 +9,8 @@
     <ProjectGuid>{10FA79FB-F60C-47A8-AD2A-E9BEE159C9E4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BasicUdpDnsTester.ConsoleRunner.Tests</RootNamespace>
-    <AssemblyName>BasicUdpDnsTester.ConsoleRunner.Tests</AssemblyName>
+    <RootNamespace>InfraServiceJobPackageUnitTest</RootNamespace>
+    <AssemblyName>InfraServiceJobPackageUnitTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -61,14 +61,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MessageReaders\BaseTestHelper.cs" />
-    <Compile Include="MessageReaders\DnsDatagramReaderTests.cs" />
-    <Compile Include="MessageReaders\DnsRecordFactoryTests.cs" />
-    <Compile Include="MessageWriters\DnsDatagramWriterTest.cs" />
-    <Compile Include="PoolByteTests.cs" />
+    <Compile Include="DnsHelperUnitTests\DnsQueryMessageProcessorTests.cs" />
+    <Compile Include="DnsHelperUnitTests\DnsResolverTests.cs" />
+    <Compile Include="DnsHelperUnitTests\MessageReaders\BaseTestHelper.cs" />
+    <Compile Include="DnsHelperUnitTests\MessageReaders\DnsDatagramReaderTests.cs" />
+    <Compile Include="DnsHelperUnitTests\MessageReaders\DnsRecordFactoryTests.cs" />
+    <Compile Include="DnsHelperUnitTests\MessageWriters\DnsDatagramWriterTest.cs" />
+    <Compile Include="DnsHelperUnitTests\MessageWriters\PoolByteTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestMessageModelTests\DnsStringTests.cs" />
-    <Compile Include="ResponseMessageModel\NameServerTests.cs" />
+    <Compile Include="DnsHelperUnitTests\RequestMessageModelTests\DnsStringTests.cs" />
+    <Compile Include="DnsHelperUnitTests\ResponseMessageModel\NameServerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -80,12 +82,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestFiles\QuestionAndAnswerQuery.txt">
+    <Content Include="DnsHelperUnitTests\TestFiles\QuestionAndAnswerQuery.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TestFiles\QuestionQuery.txt">
+    <EmbeddedResource Include="DnsHelperUnitTests\TestFiles\QuestionQuery.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

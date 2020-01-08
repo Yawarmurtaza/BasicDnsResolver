@@ -3,7 +3,7 @@ using System.Text;
 using InfraServiceJobPackage.Library.DnsHelper.MessageWriters;
 using NUnit.Framework;
 
-namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageWriters
+namespace InfraServiceJobPackageUnitTest.DnsHelperUnitTests.MessageWriters
 {
     [TestFixture]
     public class DnsDatagramWriterTest

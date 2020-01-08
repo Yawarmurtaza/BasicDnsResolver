@@ -1,9 +1,9 @@
-﻿using InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel;
-using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
+using InfraServiceJobPackage.Library.DnsHelper.ResponseMessageModel;
+using NUnit.Framework;
 
-namespace BasicUdpDnsTester.ConsoleRunner.Tests.ResponseMessageModel
+namespace InfraServiceJobPackageUnitTest.DnsHelperUnitTests.ResponseMessageModel
 {
     [TestFixture]
     public class NameServerTests

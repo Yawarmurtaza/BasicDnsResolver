@@ -1,25 +1,17 @@
-﻿using System.Net;
-using System.Net.Sockets;
-
-namespace InfraServiceJobPackage.Library.DnsHelper
+﻿namespace InfraServiceJobPackage.Library.DnsHelper
 {
-    public interface IUdpSocketProxy
-    {
-        int ReceiveTimeout { get; set; }
-        int SendTimeout { get; set; }
-        void SendTo(byte[] buffer, int offset, int size, SocketFlags socketFlags, EndPoint remoteEP);
-        int Receive(byte[] buffer, int offset, int size, SocketFlags socketFlags);
-    }
+    using System.Net;
+    using System.Net.Sockets;
 
-    public class UdpSocketProxy : IUdpSocketProxy
+    public class UdpAdapter : IUdpAdapter
     {
         private readonly Socket socket;
-        public UdpSocketProxy()
+        public UdpAdapter()
         {
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         }
 
-        public UdpSocketProxy(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
+        public UdpAdapter(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
         {
             socket = new Socket(addressFamily, socketType, protocolType);
         }

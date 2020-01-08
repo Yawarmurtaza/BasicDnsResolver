@@ -1,9 +1,8 @@
-﻿
+﻿using System;
 using InfraServiceJobPackage.Library.DnsHelper.MessageWriters;
 using NUnit.Framework;
-using System;
 
-namespace BasicUdpDnsTester.ConsoleRunner.Tests
+namespace InfraServiceJobPackageUnitTest.DnsHelperUnitTests.MessageWriters
 {
     [TestFixture]
     public class PoolByteTests

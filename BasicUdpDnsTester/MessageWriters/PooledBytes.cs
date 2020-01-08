@@ -35,6 +35,10 @@
         private ArraySegment<byte> _buffer;
         private bool _disposed;
 
+        public PooledBytes()
+        {
+            
+        }
         public PooledBytes(int count)
         {
             if (count <= 0)
@@ -46,12 +50,17 @@
             _buffer = new ArraySegment<byte>(byteArrayFromPool, 0, count);
         }
 
-        public byte[] Buffer
+        public virtual byte[] Buffer
         {
             get
             {
                 return _disposed ? throw new ObjectDisposedException(nameof(PooledBytes)) : _buffer.Array;
             }
+            set
+            {
+                _buffer = new ArraySegment<byte>(value, 0, value.Length); 
+            }
+
         }
 
         public ArraySegment<byte> BufferSegment
@@ -60,6 +69,7 @@
             {
                 return _disposed ? throw new ObjectDisposedException(nameof(PooledBytes)) : _buffer;
             }
+            set { _buffer = value; }
         }
 
         public void Dispose()

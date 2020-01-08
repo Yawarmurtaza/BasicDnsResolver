@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DnsQueryMessageProcessor.cs" />
+    <Compile Include="INetworkMessageProcessor.cs" />
     <Compile Include="MessageReaders\IDnsRecordFactory.cs" />
     <Compile Include="MessageReaders\IStringBuilderObjectPool.cs" />
     <Compile Include="MessageWriters\IDnsDatagramWriter.cs" />
@@ -53,7 +55,7 @@
     <Compile Include="Records\EmptyRecord.cs" />
     <Compile Include="ICommunicator.cs" />
     <Compile Include="IDnsResolver.cs" />
-    <Compile Include="IUdpSocketProxy.cs" />
+    <Compile Include="IUdpAdapter.cs" />
     <Compile Include="MessageReaders\ArraySegmentExtensions.cs" />
     <Compile Include="MessageReaders\DnsDatagramReader.cs" />
     <Compile Include="Records\DnsResourceRecord.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="DnsProtocol\QueryType.cs" />
     <Compile Include="ResponseMessageModel\IDnsQueryResponse.cs" />
     <Compile Include="ResponseMessageModel\NameServer.cs" />
+    <Compile Include="UdpAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

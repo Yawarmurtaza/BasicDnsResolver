@@ -1,14 +1,12 @@
-﻿using System.Net;
-using System.Text;
+﻿using System;
+using System.Net;
+using InfraServiceJobPackage.Library.DnsHelper.MessageReaders;
+using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
+using Moq;
+using NUnit.Framework;
 
-namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
+namespace InfraServiceJobPackageUnitTest.DnsHelperUnitTests.MessageReaders
 {
-    using InfraServiceJobPackage.Library.DnsHelper.MessageReaders;
-    using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
-    using Moq;
-    using NUnit.Framework;
-    using System;
-
     [TestFixture]
     public class DnsDatagramReaderTests : BaseTestHelper
     {

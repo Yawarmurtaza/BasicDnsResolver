@@ -17,13 +17,13 @@
         /// <inheritdoc />
         public override string ToString()
         {
-            return ToString();
+            return ToString(0);
         }
 
         /// <summary> by <paramref name="offset"/>. Set the offset to -32 for example to make it print nicely in console. </summary>
         /// <param name="offset">The offset.</param>
         /// <returns>A string representing this instance.</returns>
-        public virtual string ToString(int offset = 0)
+        public virtual string ToString(int offset)
         {
             string returnString = $"{DomainName}, {offset}{TimeToLive}\t{RecordClass}\t{RecordType}\t{RecordToString()}";            
             return returnString;

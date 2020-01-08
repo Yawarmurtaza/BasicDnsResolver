@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Net;
-using System.Text;
 using InfraServiceJobPackage.Library.DnsHelper.MessageReaders;
 using InfraServiceJobPackage.Library.DnsHelper.Records;
 using InfraServiceJobPackage.Library.DnsHelper.RequestMessageModel;
 using Moq;
 using NUnit.Framework;
 
-namespace BasicUdpDnsTester.ConsoleRunner.Tests.MessageReaders
+namespace InfraServiceJobPackageUnitTest.DnsHelperUnitTests.MessageReaders
 {
     //[TestFixture]
     //public class StringBuilderObjectPoolTests
